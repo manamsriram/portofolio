@@ -206,7 +206,7 @@ export default function Home() {
       color: 'blue',
       link: 'https://github.com/manamsriram/Smart-Grocery-Assistant',
       details: 'Built a cross-platform mobile app for grocery management with barcode scanning, recipe suggestions, and smart shopping lists. Implemented offline-first architecture, push notifications, and seamless cloud synchronization.',
-      skills: ['TypeScript', 'React Native', 'Mobile Development', 'TypeScript']
+      skills: ['TypeScript', 'React Native', 'Mobile Development']
     },
     {
       id: 6,
@@ -230,10 +230,24 @@ export default function Home() {
   }), []);
 
   const timeline = [
-    { year: '2024', title: 'Graduate Software Engineer', description: 'MS in Software Engineering, San Jose State University', category: 'education' },
-    { year: '2023', title: 'Software Engineering Intern', description: 'Distributed systems and cloud infrastructure development', category: 'experience' },
-    { year: '2022', title: 'Research Assistant', description: 'SDN and network virtualization research', category: 'experience' },
-    { year: '2021', title: 'BS Computer Science', description: 'Graduated with honors, focus on systems programming', category: 'education' }
+    {
+      year: '2024–2026',
+      title: 'MS Software Engineering',
+      description: 'San Jose State University · San Jose, CA. Coursework: Enterprise Distributed Technologies, Engineering Software Systems, Software Defined Networks, Virtualization Technologies, Machine Learning, Mobile Application Development.',
+      category: 'education'
+    },
+    {
+      year: 'May 2023–Mar 2024',
+      title: 'Student Mentor',
+      description: 'SmartInterviews · Ran 50+ code reviews and sprint-style practice cycles with 100+ students on data structures, algorithms, and backend topics. Wrote and presented curriculum on backend development, RESTful APIs, and scalable system design.',
+      category: 'experience'
+    },
+    {
+      year: '2020–2024',
+      title: 'B.Tech Information Technology',
+      description: 'Prasad V. Potluri Siddhartha Institute of Technology · Vijayawada, India. Graduated May 2024.',
+      category: 'education'
+    }
   ];
 
   const filteredProjects = useMemo(() => {
