@@ -128,7 +128,7 @@ export default function Home() {
         response = 'Sri Ram Mannam - Graduate Software Engineer specializing in Distributed Systems, Backend/Cloud, SDN/Virtualization';
         break;
       case 'projects':
-        response = 'Featured projects: Baby Hypervisor, Distributed Document Editing, SDN Load Balancer, Restaurant Finder, Smart Grocery Assistant, Cloud Infrastructure';
+        response = 'Featured projects: LessGo, Restaurant Finder, DocSense AI, EdgeRunner, PIC Standard';
         break;
       case 'contact':
         response = 'Email: manamsriram@gmail.com | Location: Pacific Time Zone | GitHub: github.com/manamsriram';
@@ -155,69 +155,69 @@ export default function Home() {
   const projects = useMemo(() => [
     {
       id: 1,
-      title: 'Baby Hypervisor',
-      description: 'A lightweight hypervisor development project demonstrating virtualization concepts and system-level programming.',
-      tags: ['C++', 'Virtualization', 'Systems Programming'],
-      category: 'backend',
-      color: 'green',
-      link: 'https://github.com/manamsriram/baby_hypervisor',
-      details: 'Developed a Type-1 hypervisor from scratch with memory management, CPU virtualization, and I/O device emulation. Implemented direct hardware access and guest OS support with minimal overhead.',
-      skills: ['Virtualization', 'Systems Programming', 'C++']
+      title: 'LessGo – Campus Ridesharing',
+      description: 'Full-stack campus ridesharing platform with a SwiftUI iOS client, 8 Node.js/TypeScript microservices, live driver tracking, in-app chat, and Stripe payments.',
+      tags: ['TypeScript', 'Swift/SwiftUI', 'Node.js', 'PostgreSQL'],
+      category: ['distributed', 'cloud', 'devops'],
+      color: 'cyan',
+      link: 'https://github.com/manamsriram/SJSU_Ridesharing',
+      details: 'Broke the system into 8 independently deployable Node.js/Express services behind an API gateway with JWT auth and rate limiting. Added a 3-stage Python matching pipeline using graph embeddings, PostGIS geo-filtering (5 km / ±30 min), and a cost function across detour, wait time, and social history to pick fair driver matches.',
+      skills: ['Distributed Systems', 'TypeScript', 'Node.js', 'PostgreSQL', 'Docker']
     },
     {
       id: 2,
-      title: 'Distributed Document Editing',
-      description: 'A collaborative document editing system with real-time synchronization and conflict resolution.',
-      tags: ['Java', 'Distributed Systems', 'Real-time'],
-      category: 'distributed',
-      color: 'cyan',
-      link: 'https://github.com/manamsriram/Distributed_Document_Editing',
-      details: 'Built a real-time collaborative editing system using operational transformation (OT) for conflict resolution. Implemented WebSocket-based communication, automatic conflict detection, and merge algorithms for concurrent edits.',
-      skills: ['Distributed Systems', 'Java', 'Real-time', 'WebSocket']
+      title: 'Restaurant Finder',
+      description: 'Full-stack restaurant discovery app — React 18 SPA backed by a FastAPI/SQLAlchemy REST API with ZIP-code search, owner dashboards, and JWT-protected roles.',
+      tags: ['React 18', 'Python', 'FastAPI', 'MySQL', 'AWS'],
+      category: ['fullstack', 'cloud', 'devops'],
+      color: 'purple',
+      link: 'https://github.com/manamsriram/Restaurant-Finder-Application',
+      details: 'Led front–back integration for a 4-person Agile team: defined API contracts, wired Google Maps ZIP-code search, and built owner/admin dashboards. Set up GitHub Actions to run pytest and integration tests on every push, deploying passing builds to AWS EC2/RDS. Reworked schemas and indexes to cut query time ~50% on the main search path.',
+      skills: ['React', 'Python', 'FastAPI', 'AWS', 'Backend']
     },
     {
       id: 3,
-      title: 'SDN Load Balancer',
-      description: 'Software-defined networking based load balancing solution for optimizing network traffic distribution.',
-      tags: ['Python', 'SDN', 'Networking'],
-      category: 'networking',
-      color: 'amber',
-      link: 'https://github.com/manamsriram/load_balancer',
-      details: 'Designed and implemented an SDN-based load balancer using OpenFlow protocol. Created dynamic traffic distribution algorithms, real-time monitoring dashboards, and adaptive routing strategies for optimal network performance.',
-      skills: ['SDN', 'Networking', 'Python', 'Load Balancing']
+      title: 'DocSense AI',
+      description: 'Agentic RAG document platform — upload PDFs and chat with them. Multi-stage retrieval with dense vectors, BM25, RRF fusion, and cross-encoder reranking returns page-level citations.',
+      tags: ['Python', 'Flask', 'Qdrant', 'Redis', 'Docker'],
+      category: ['ai', 'cloud', 'devops'],
+      color: 'green',
+      link: 'https://github.com/manamsriram/AI-PDF-Reader',
+      details: 'Built an Alpine.js UI and Flask backend with a Corrective RAG loop to handle multi-hop questions. Added a three-tier Redis cache, Supabase JWT auth with per-user Qdrant collection isolation, vision captions for image-heavy PDFs, and a fallback path across Groq Llama 3.3 70B and a secondary model. Shipped via Docker + GitHub Actions to Render.',
+      skills: ['Python', 'AI/ML', 'RAG', 'Redis', 'Docker']
     },
     {
       id: 4,
-      title: 'Restaurant Finder Application',
-      description: 'A Yelp-like application for discovering and reviewing restaurants with location-based services.',
-      tags: ['Python', 'Web Development', 'API Integration'],
-      category: 'backend',
-      color: 'purple',
-      link: 'https://github.com/manamsriram/Restaurant-Finder-Application',
-      details: 'Developed a full-stack restaurant discovery platform with geolocation services, user reviews, ratings, and advanced search filters. Integrated multiple APIs for real-time data and implemented caching strategies for performance.',
-      skills: ['Python', 'Web Development', 'API Integration', 'Backend']
+      title: 'EdgeRunner',
+      description: 'Autonomous trading platform with a FastAPI backend, React 19 dashboard, backtested quant strategies, an 8-check risk gate, and 241 offline pytest tests.',
+      tags: ['Python', 'FastAPI', 'React 19', 'TypeScript', 'PostgreSQL'],
+      category: ['fullstack', 'backend', 'ai'],
+      color: 'amber',
+      link: 'https://github.com/manamsriram/EdgeRunner',
+      details: 'Exposed 15+ endpoints for positions, approvals, kill-switch controls, and performance charts so humans can monitor and override the bot in real time. Implemented idempotent trade execution tracking Sharpe ratio, max drawdown, and win rate. All 241 pytest tests pass offline (no API keys or network), keeping refactors from silently changing trade logic.',
+      skills: ['Python', 'FastAPI', 'React', 'TypeScript', 'Backend']
     },
     {
       id: 5,
-      title: 'Smart Grocery Assistant',
-      description: 'A React Native mobile application for smart grocery shopping with inventory management features.',
-      tags: ['TypeScript', 'React Native', 'Mobile Development'],
-      category: 'mobile',
+      title: 'PIC Standard',
+      description: 'Open-source contributor to Provenance & Intent Contracts — a TypeScript/Python framework for agentic service observability and security.',
+      tags: ['TypeScript', 'Python', 'Docker', 'Observability'],
+      category: ['backend', 'devops'],
       color: 'blue',
-      link: 'https://github.com/manamsriram/Smart-Grocery-Assistant',
-      details: 'Built a cross-platform mobile app for grocery management with barcode scanning, recipe suggestions, and smart shopping lists. Implemented offline-first architecture, push notifications, and seamless cloud synchronization.',
-      skills: ['TypeScript', 'React Native', 'Mobile Development']
+      link: 'https://github.com/manamsriram/pic-standard',
+      details: 'Built a Dockerized HTTP bridge for agentic provenance services with Python health checks and slimmer image builds, making local developer setup faster. Tightened security by adding audit-logging middleware, cleaning up X-Request-ID tracing, and exposing version endpoints in the PIC SDK so downstream services can identify which build handled a request.',
+      skills: ['TypeScript', 'Python', 'Docker', 'Security', 'Backend']
     },
     {
       id: 6,
-      title: 'Cloud Infrastructure Projects',
-      description: 'Various cloud-native applications and infrastructure automation projects for scalable deployments.',
-      tags: ['Cloud Computing', 'DevOps', 'Automation'],
-      category: 'cloud',
+      title: 'Smart Grocery Assistant',
+      description: 'Cross-platform mobile app for grocery management — shopping lists, pantry inventory with expiry tracking, and recipe suggestions based on what you have.',
+      tags: ['React Native', 'TypeScript', 'Expo', 'Firebase'],
+      category: ['mobile', 'cloud'],
       color: 'green',
-      link: 'https://github.com/manamsriram',
-      details: 'Developed multiple cloud-native solutions including serverless architectures, container orchestration, CI/CD pipelines, and infrastructure as code implementations using Terraform and AWS CloudFormation.',
-      skills: ['Cloud Computing', 'DevOps', 'AWS', 'Terraform', 'CI/CD', 'Docker', 'Kubernetes']
+      link: 'https://github.com/manamsriram/Smart-Grocery-Assistant',
+      details: 'Built with React Native + Expo and TypeScript, using Firebase Firestore for real-time data sync and Firebase Auth for user accounts. Supports multiple shopping lists, pantry items with expiration dates, and recipe discovery from available ingredients. Navigation via Expo Router, global state via React Context, and light/dark/system theme support.',
+      skills: ['React Native', 'TypeScript', 'Firebase', 'Mobile Development']
     }
   ], []);
 
@@ -253,7 +253,7 @@ export default function Home() {
   const filteredProjects = useMemo(() => {
     let result = filterCategory === 'all'
       ? projects
-      : projects.filter(project => project.category === filterCategory);
+      : projects.filter(project => project.category.includes(filterCategory));
 
     if (selectedSkill) {
       const skillItems = skills[selectedSkill as keyof typeof skills].items;
@@ -679,7 +679,7 @@ export default function Home() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="flex flex-wrap justify-center gap-3 mb-6"
           >
-            {['all', 'backend', 'distributed', 'networking', 'mobile', 'cloud'].map((category) => (
+            {['all', 'backend', 'fullstack', 'distributed', 'ai', 'cloud', 'devops', 'mobile'].map((category) => (
               <button
                 key={category}
                 onClick={() => setFilterCategory(category)}
