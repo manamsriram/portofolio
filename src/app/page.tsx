@@ -25,6 +25,8 @@ export default function Home() {
   });
 
   const heroRef = useRef<HTMLElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const mouseRef = useRef({ x: -1000, y: -1000 });
   const aboutRef = useRef<HTMLElement>(null);
   const projectsRef = useRef<HTMLElement>(null);
   const contactRef = useRef<HTMLElement>(null);
@@ -315,18 +317,78 @@ export default function Home() {
     setCommandPaletteOpen(false);
   };
 
-  const [particles, setParticles] = useState<Array<{ id: number; left: number; top: number; x: number; duration: number; delay: number }>>([]);
-
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setParticles([...Array(20)].map((_, i) => ({
-      id: i,
-      left: Math.random() * 100,
-      top: Math.random() * 100,
-      x: Math.random() * 10 - 5,
-      duration: 3 + Math.random() * 2,
-      delay: Math.random() * 2,
-    })));
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const resize = () => {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    };
+    resize();
+    window.addEventListener('resize', resize);
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      mouseRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    };
+    canvas.addEventListener('mousemove', handleMouseMove);
+    canvas.addEventListener('mouseleave', () => { mouseRef.current = { x: -1000, y: -1000 }; });
+
+    const COUNT = 400;
+    const REPEL_RADIUS = 100;
+    const REPEL_FORCE = 4;
+    const FRICTION = 0.88;
+    const COLORS = ['0,255,255', '0,255,0', '0,102,255', '255,255,255'];
+
+    const pts = Array.from({ length: COUNT }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * 0.4,
+      vy: (Math.random() - 0.5) * 0.4,
+      r: Math.random() * 2 + 1,
+      a: Math.random() * 0.45 + 0.1,
+      c: COLORS[Math.floor(Math.random() * COLORS.length)],
+    }));
+
+    let animId: number;
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const { x: mx, y: my } = mouseRef.current;
+
+      for (const p of pts) {
+        const dx = p.x - mx;
+        const dy = p.y - my;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < REPEL_RADIUS && dist > 0) {
+          const f = ((REPEL_RADIUS - dist) / REPEL_RADIUS) * REPEL_FORCE;
+          p.vx += (dx / dist) * f;
+          p.vy += (dy / dist) * f;
+        }
+        p.vx *= FRICTION;
+        p.vy *= FRICTION;
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0) p.x = canvas.width;
+        if (p.x > canvas.width) p.x = 0;
+        if (p.y < 0) p.y = canvas.height;
+        if (p.y > canvas.height) p.y = 0;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${p.c}, ${p.a})`;
+        ctx.fill();
+      }
+      animId = requestAnimationFrame(draw);
+    };
+    draw();
+
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener('resize', resize);
+    };
   }, []);
 
   return (
@@ -422,30 +484,8 @@ export default function Home() {
         {/* Background Effects */}
         <div className="absolute inset-0 bg-grid-pattern opacity-30" />
         <div className="absolute inset-0 bg-gradient-radial" />
-
-        {/* Floating Particles */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {particles.map((particle) => (
-            <motion.div
-              key={particle.id}
-              className="particle"
-              style={{
-                left: `${particle.left}%`,
-                top: `${particle.top}%`,
-              }}
-              animate={{
-                y: [0, -20, 0],
-                x: [0, particle.x, 0],
-                opacity: [0.3, 0.6, 0.3],
-              }}
-              transition={{
-                duration: particle.duration,
-                repeat: Infinity,
-                delay: particle.delay,
-              }}
-            />
-          ))}
-        </div>
+        {/* Physics Particles */}
+        <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-auto" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
