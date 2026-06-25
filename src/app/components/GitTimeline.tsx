@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { timelineItems, TimelineItem } from '../data/timeline';
@@ -90,7 +90,7 @@ function TrackCell({
   );
 }
 
-function HoverCard({ hovered }: { hovered: NonNullable<HoverState> }) {
+function HoverCard({ hovered, onMouseEnter, onMouseLeave }: { hovered: NonNullable<HoverState>; onMouseEnter: () => void; onMouseLeave: () => void }) {
   const { item, x, y } = hovered;
   const CARD_WIDTH = 304;
   const left =
@@ -104,8 +104,10 @@ function HoverCard({ hovered }: { hovered: NonNullable<HoverState> }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 4 }}
       transition={{ duration: 0.15 }}
-      className="fixed z-50 bg-surface border border-surface-lighter rounded-lg p-4 shadow-2xl pointer-events-none"
+      className="fixed z-50 bg-surface border border-surface-lighter rounded-lg p-4 shadow-2xl"
       style={{ left, top: y, width: CARD_WIDTH }}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
     >
       <div className="flex items-start justify-between gap-2 mb-2">
         <h4 className="text-sm font-semibold text-text-primary font-mono-display leading-snug">
@@ -140,7 +142,14 @@ function HoverCard({ hovered }: { hovered: NonNullable<HoverState> }) {
           <span className="text-xs text-text-secondary font-mono-display">{item.dateRange}</span>
         )}
         {item.link && (
-          <span className="text-xs text-electric-cyan font-mono-display">View GitHub →</span>
+          <a
+            href={item.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-electric-cyan hover:text-electric-cyan/80 font-mono-display transition-colors"
+          >
+            View GitHub →
+          </a>
         )}
       </div>
     </motion.div>
@@ -150,6 +159,7 @@ function HoverCard({ hovered }: { hovered: NonNullable<HoverState> }) {
 export default function GitTimeline() {
   const [hovered, setHovered] = useState<HoverState>(null);
   const [mounted, setMounted] = useState(false);
+  const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { setMounted(true); }, []);
@@ -157,7 +167,17 @@ export default function GitTimeline() {
   const visibleItems = timelineItems.filter((i) => i.visible);
   const years = [...new Set(visibleItems.flatMap((i) => i.years))].sort((a, b) => b - a);
 
+  const cancelHide = () => {
+    if (hideTimer.current) clearTimeout(hideTimer.current);
+  };
+
+  const scheduleHide = () => {
+    cancelHide();
+    hideTimer.current = setTimeout(() => setHovered(null), 120);
+  };
+
   const handleNodeEnter = (e: React.MouseEvent<HTMLDivElement>, item: TimelineItem) => {
+    cancelHide();
     const rect = e.currentTarget.getBoundingClientRect();
     setHovered({ item, x: rect.right + 12, y: rect.top - 8 });
   };
@@ -195,7 +215,7 @@ export default function GitTimeline() {
                 key={track}
                 items={yearItems.filter((i) => i.track === track)}
                 onNodeEnter={handleNodeEnter}
-                onNodeLeave={() => setHovered(null)}
+                onNodeLeave={scheduleHide}
               />
             ))}
           </div>
@@ -206,7 +226,14 @@ export default function GitTimeline() {
       {mounted &&
         createPortal(
           <AnimatePresence>
-            {hovered && <HoverCard key={hovered.item.id} hovered={hovered} />}
+            {hovered && (
+              <HoverCard
+                key={hovered.item.id}
+                hovered={hovered}
+                onMouseEnter={cancelHide}
+                onMouseLeave={scheduleHide}
+              />
+            )}
           </AnimatePresence>,
           document.body
         )}

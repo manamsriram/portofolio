@@ -224,6 +224,20 @@ export default function Home() {
 
   const certifications = [
     {
+      title: 'Wells Fargo Software Engineering Virtual Experience',
+      issuer: 'Wells Fargo / Forage',
+      status: 'Completed',
+      description: 'Built a system requirements document and object model diagram for a new portfolio management system, and set up a Kafka messaging system for data processing.',
+      link: 'https://www.theforage.com/completion-certificates/nkmk7gJitYs4TBvoA/9Wvq4L2WCFQDyyPp3_nkmk7gJitYs4TBvoA_6994b6eaf08021556e51fd39_1771871939738_completion_certificate.pdf',
+    },
+    {
+      title: 'SmartInterviews DSA & Problem Solving Certificate',
+      issuer: 'SmartInterviews',
+      status: 'Completed',
+      description: 'Data structures and algorithms, competitive programming, and systematic problem-solving for technical interviews.',
+      link: 'https://smartinterviews.in/certificate/84411827',
+    },
+    {
       title: 'IBM Backend Development Professional Certificate',
       issuer: 'IBM / Coursera',
       status: 'In Progress',
@@ -658,7 +672,17 @@ export default function Home() {
                     <span className="text-xs text-text-secondary font-mono-display">{cert.issuer}</span>
                   </div>
                   <h4 className="text-base font-semibold text-text-primary mb-2">{cert.title}</h4>
-                  <p className="text-sm text-text-secondary">{cert.description}</p>
+                  <p className="text-sm text-text-secondary mb-3">{cert.description}</p>
+                  {'link' in cert && cert.link && (
+                    <a
+                      href={cert.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-xs text-electric-cyan hover:text-electric-cyan/80 font-mono-display transition-colors"
+                    >
+                      View Certificate →
+                    </a>
+                  )}
                 </motion.div>
               ))}
             </div>
