@@ -168,8 +168,8 @@ export default function Home() {
     {
       id: 1,
       title: 'LessGo – Campus Ridesharing',
-      description: 'Full-stack campus ridesharing platform with a SwiftUI iOS client, 8 Node.js/TypeScript microservices, live driver tracking, in-app chat, and Stripe payments.',
-      tags: ['TypeScript', 'Swift/SwiftUI', 'Node.js', 'PostgreSQL'],
+      description: 'Campus ridesharing — 8 Node.js microservices, SwiftUI iOS client, and Stripe payments.',
+      tags: ['TypeScript', 'Node.js', 'SwiftUI', 'GCP', 'K8s'],
       category: ['distributed', 'cloud', 'devops'],
       color: 'cyan',
       link: 'https://github.com/manamsriram/SJSU_Ridesharing',
@@ -180,12 +180,12 @@ export default function Home() {
         'Python matching pipeline runs in 3 stages: graph embeddings, PostGIS geo-filter (5 km / ±30 min), then a cost function across detour, wait time, and ride history',
         'Live driver tracking and in-app chat on the SwiftUI iOS client; Stripe handles payments',
       ],
-      skills: ['Distributed Systems', 'TypeScript', 'Node.js', 'PostgreSQL', 'Docker']
+      skills: ['Distributed Systems', 'TypeScript', 'Node.js', 'Docker', 'Backend']
     },
     {
       id: 2,
       title: 'Restaurant Finder',
-      description: 'Full-stack restaurant discovery app — React 18 SPA backed by a FastAPI/SQLAlchemy REST API with ZIP-code search, owner dashboards, and JWT-protected roles.',
+      description: 'React 18 + FastAPI restaurant finder with ZIP-code search, owner dashboards, and AWS CI/CD.',
       tags: ['React 18', 'Python', 'FastAPI', 'MySQL', 'AWS'],
       category: ['fullstack', 'cloud', 'devops'],
       color: 'purple',
@@ -203,7 +203,7 @@ export default function Home() {
     {
       id: 3,
       title: 'DocSense AI',
-      description: 'Agentic RAG document platform — upload PDFs and chat with them. Multi-stage retrieval with dense vectors, BM25, RRF fusion, and cross-encoder reranking returns page-level citations.',
+      description: 'PDF chat via agentic RAG — multi-stage retrieval with page-level source citations.',
       tags: ['Python', 'Flask', 'Qdrant', 'Redis', 'Docker'],
       category: ['ai', 'cloud', 'devops'],
       color: 'green',
@@ -221,7 +221,7 @@ export default function Home() {
     {
       id: 4,
       title: 'EdgeRunner',
-      description: 'Autonomous trading platform with a FastAPI backend, React 19 dashboard, backtested quant strategies, an 8-check risk gate, and 241 offline pytest tests.',
+      description: 'Autonomous trading engine with backtested strategies, 8-check risk gate, and 241 offline tests.',
       tags: ['Python', 'FastAPI', 'React 19', 'TypeScript', 'PostgreSQL'],
       category: ['fullstack', 'backend', 'ai'],
       color: 'amber',
@@ -238,7 +238,7 @@ export default function Home() {
     {
       id: 5,
       title: 'PIC Standard',
-      description: 'Open-source contributor to Provenance & Intent Contracts — a TypeScript/Python framework for agentic service observability and security.',
+      description: 'Open-source contributor to an agentic observability framework — audit logging, tracing, and security.',
       tags: ['TypeScript', 'Python', 'Docker', 'Observability'],
       category: ['backend', 'devops'],
       color: 'blue',
@@ -253,7 +253,7 @@ export default function Home() {
     {
       id: 6,
       title: 'Smart Grocery Assistant',
-      description: 'Cross-platform mobile app for grocery management — shopping lists, pantry inventory with expiry tracking, and recipe suggestions based on what you have.',
+      description: 'Mobile pantry tracker with expiry alerts, shopping lists, and AI recipe suggestions.',
       tags: ['React Native', 'TypeScript', 'Expo', 'Firebase'],
       category: ['mobile', 'cloud'],
       color: 'green',
@@ -961,14 +961,14 @@ export default function Home() {
                     transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
                     className="bg-surface border border-surface-lighter rounded-lg overflow-hidden hover-lift hover-glow-purple group"
                   >
-                    <div className="p-6">
+                    <div className="p-6 flex flex-col min-h-[280px]">
                       <div className="flex items-center justify-between mb-4">
                         <h3 className="text-xl font-bold text-text-primary group-hover:text-accent-purple transition-colors">
                           {project.title}
                         </h3>
                         <div className={`w-3 h-3 rounded-full bg-${project.color === 'green' ? 'terminal-green' : project.color === 'cyan' ? 'electric-cyan' : project.color === 'amber' ? 'warning-amber' : project.color === 'purple' ? 'accent-purple' : 'electric-blue'}`} />
                       </div>
-                      <p className="text-text-secondary mb-4 line-clamp-3">
+                      <p className="text-text-secondary mb-4 text-sm leading-relaxed">
                         {project.description}
                       </p>
                       <div className="flex flex-wrap gap-2 mb-4">
@@ -981,7 +981,7 @@ export default function Home() {
                           </span>
                         ))}
                       </div>
-                      <div className="flex items-center justify-between">
+                      <div className="flex items-center justify-between mt-auto pt-4">
                         <button
                           onClick={() => setExpandedProject(expandedProject === project.id ? null : project.id)}
                           className="text-sm text-accent-purple hover:text-accent-purple-dim font-mono-display transition-colors"
