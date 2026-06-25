@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import GitTimeline from './components/GitTimeline';
+import RunningName from './components/RunningName';
 
 export default function Home() {
   const [currentPhrase, setCurrentPhrase] = useState(0);
@@ -507,8 +508,7 @@ export default function Home() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 font-serif-body"
           >
-            <span className="text-text-primary">Sri Ram </span>
-            <span className="text-electric-cyan">Mannam</span>
+            <RunningName />
           </motion.h1>
 
           <motion.p
