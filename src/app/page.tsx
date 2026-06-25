@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
+import Image from 'next/image';
 import GitTimeline from './components/GitTimeline';
 import RunningName from './components/RunningName';
 
@@ -12,11 +13,18 @@ export default function Home() {
   const [activeSection, setActiveSection] = useState('hero');
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
   const [terminalInput, setTerminalInput] = useState('');
-  const [terminalOutput, setTerminalOutput] = useState<string[]>([]);
+  const [terminalOutput, setTerminalOutput] = useState<string[]>([
+    'Type a command to get started:',
+    '  help    → see all commands',
+    '  email   → open mail client',
+    '  about   → who is Sri Ram',
+  ]);
   const [expandedProject, setExpandedProject] = useState<number | null>(null);
   const [filterCategory, setFilterCategory] = useState<string>('all');
   const [selectedSkill, setSelectedSkill] = useState<string | null>(null);
   const [colCount, setColCount] = useState(3);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [resumeDropdownOpen, setResumeDropdownOpen] = useState(false);
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
@@ -165,6 +173,8 @@ export default function Home() {
       category: ['distributed', 'cloud', 'devops'],
       color: 'cyan',
       link: 'https://github.com/manamsriram/SJSU_Ridesharing',
+      demoLink: 'https://www.youtube.com/watch?v=l79FVVxRbPU',
+      demoLabel: 'Watch Demo',
       details: [
         '8 Node.js/Express microservices behind an API gateway — each one deployable on its own with JWT auth and rate limiting',
         'Python matching pipeline runs in 3 stages: graph embeddings, PostGIS geo-filter (5 km / ±30 min), then a cost function across detour, wait time, and ride history',
@@ -180,6 +190,8 @@ export default function Home() {
       category: ['fullstack', 'cloud', 'devops'],
       color: 'purple',
       link: 'https://github.com/manamsriram/Restaurant-Finder-Application',
+      demoLink: 'https://restaurant-finder-application.vercel.app/',
+      demoLabel: 'Live Demo',
       details: [
         'Led front-back integration for a 4-person Agile team — defined API contracts, ran reviews, kept both sides in sync',
         'Wired Google Maps ZIP-code search and built separate dashboards for restaurant owners and admins',
@@ -195,7 +207,9 @@ export default function Home() {
       tags: ['Python', 'Flask', 'Qdrant', 'Redis', 'Docker'],
       category: ['ai', 'cloud', 'devops'],
       color: 'green',
-      link: 'https://github.com/manamsriram/AI-PDF-Reader',
+      link: 'https://github.com/manamsriram/DocSense-AI',
+      demoLink: 'https://docsense-ai-7k4b.onrender.com',
+      demoLabel: 'Live Demo',
       details: [
         'Multi-stage retrieval: dense vectors + BM25, fused with RRF, then reranked with a cross-encoder — citations link back to the exact page',
         'Corrective RAG loop re-queries when confidence is low, so multi-hop questions actually get answered',
@@ -212,6 +226,8 @@ export default function Home() {
       category: ['fullstack', 'backend', 'ai'],
       color: 'amber',
       link: 'https://github.com/manamsriram/EdgeRunner',
+      demoLink: 'https://edge-runner-xi.vercel.app/',
+      demoLabel: 'Live Demo',
       details: [
         '15+ endpoints for positions, approvals, kill-switch controls, and live performance charts — humans stay in the loop',
         '8-check risk gate runs before every trade; idempotent execution logs track Sharpe ratio, max drawdown, and win rate',
@@ -226,7 +242,7 @@ export default function Home() {
       tags: ['TypeScript', 'Python', 'Docker', 'Observability'],
       category: ['backend', 'devops'],
       color: 'blue',
-      link: 'https://github.com/manamsriram/pic-standard',
+      link: 'https://github.com/pic-standard/pic-standard',
       details: [
         'Dockerized HTTP bridge for agentic provenance services — slimmer image builds, Python health checks, local setup just works',
         'Audit-logging middleware and X-Request-ID tracing cleanup tightened the security surface',
@@ -242,6 +258,8 @@ export default function Home() {
       category: ['mobile', 'cloud'],
       color: 'green',
       link: 'https://github.com/manamsriram/Smart-Grocery-Assistant',
+      demoLink: 'https://smart-grocery-assistant-chi.vercel.app/',
+      demoLabel: 'Live Demo',
       details: [
         'Track pantry items with expiration dates and get recipe suggestions based on what you actually have on hand',
         'Multiple shopping lists with real-time sync via Firebase Firestore; accounts through Firebase Auth',
@@ -407,7 +425,7 @@ export default function Home() {
             <div className="font-mono-display font-bold text-lg text-terminal-green">
               Sri Ram Mannam
             </div>
-            <div className="hidden md:flex space-x-8">
+            <div className="hidden md:flex items-center space-x-6">
               {['hero', 'about', 'projects', 'contact'].map((section) => (
                 <button
                   key={section}
@@ -421,16 +439,98 @@ export default function Home() {
                   {section.charAt(0).toUpperCase() + section.slice(1)}
                 </button>
               ))}
+              {/* Resume dropdown */}
+              <div className="relative">
+                <button
+                  onClick={() => setResumeDropdownOpen(!resumeDropdownOpen)}
+                  onBlur={() => setTimeout(() => setResumeDropdownOpen(false), 150)}
+                  className="text-sm font-mono-display text-terminal-green border border-terminal-green/50 px-3 py-1.5 rounded-lg hover:bg-terminal-green/10 transition-colors flex items-center gap-1"
+                >
+                  Resume ↓
+                </button>
+                {resumeDropdownOpen && (
+                  <div className="absolute top-full right-0 mt-1 bg-surface border border-surface-lighter rounded-lg overflow-hidden shadow-lg min-w-[160px]">
+                    <a
+                      href="/resume-fullstack.pdf"
+                      download
+                      className="block px-4 py-2 text-sm font-mono-display text-text-secondary hover:text-terminal-green hover:bg-surface-light transition-colors"
+                    >
+                      Full-Stack
+                    </a>
+                    <a
+                      href="/resume-backend.pdf"
+                      download
+                      className="block px-4 py-2 text-sm font-mono-display text-text-secondary hover:text-terminal-green hover:bg-surface-light transition-colors border-t border-surface-lighter"
+                    >
+                      Backend
+                    </a>
+                  </div>
+                )}
+              </div>
+              <button
+                onClick={() => setCommandPaletteOpen(true)}
+                className="flex items-center space-x-2 px-3 py-1.5 bg-surface-light rounded-lg border border-surface-lighter hover:border-electric-cyan transition-colors"
+              >
+                <span className="text-xs text-text-secondary">⌘K</span>
+                <span className="text-sm text-text-secondary">Command Palette</span>
+              </button>
             </div>
+            {/* Hamburger (mobile only) */}
             <button
-              onClick={() => setCommandPaletteOpen(true)}
-              className="hidden md:flex items-center space-x-2 px-3 py-1.5 bg-surface-light rounded-lg border border-surface-lighter hover:border-electric-cyan transition-colors"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 text-text-secondary hover:text-text-primary transition-colors"
+              aria-label="Toggle menu"
             >
-              <span className="text-xs text-text-secondary">⌘K</span>
-              <span className="text-sm text-text-secondary">Command Palette</span>
+              {mobileMenuOpen ? (
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              )}
             </button>
           </div>
         </div>
+        {/* Mobile menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t border-surface-lighter bg-deep-bg/95">
+            <div className="px-4 py-4 space-y-1">
+              {['hero', 'about', 'projects', 'contact'].map((section) => (
+                <button
+                  key={section}
+                  onClick={() => { scrollToSection(section); setMobileMenuOpen(false); }}
+                  className={`block w-full text-left px-3 py-2 rounded-lg text-sm font-mono-display transition-colors ${
+                    activeSection === section
+                      ? 'text-electric-cyan bg-surface-light'
+                      : 'text-text-secondary hover:text-text-primary hover:bg-surface-light'
+                  }`}
+                >
+                  {section.charAt(0).toUpperCase() + section.slice(1)}
+                </button>
+              ))}
+              <div className="border-t border-surface-lighter pt-3 mt-3 grid grid-cols-2 gap-2">
+                <a
+                  href="/resume-fullstack.pdf"
+                  download
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-center px-3 py-2 text-sm font-mono-display text-terminal-green border border-terminal-green/50 rounded-lg hover:bg-terminal-green/10 transition-colors"
+                >
+                  Resume (FS)
+                </a>
+                <a
+                  href="/resume-backend.pdf"
+                  download
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-center px-3 py-2 text-sm font-mono-display text-terminal-green border border-terminal-green/50 rounded-lg hover:bg-terminal-green/10 transition-colors"
+                >
+                  Resume (BE)
+                </a>
+              </div>
+            </div>
+          </div>
+        )}
       </nav>
 
       {/* Command Palette */}
@@ -562,6 +662,13 @@ export default function Home() {
             >
               Get In Touch
             </button>
+            <a
+              href="/resume-fullstack.pdf"
+              download
+              className="px-8 py-3 border-2 border-terminal-green text-terminal-green font-semibold rounded-lg hover:bg-terminal-green hover:text-deep-bg transition-colors font-mono-display text-center"
+            >
+              Resume ↓
+            </a>
           </motion.div>
 
           {/* Scroll Hint */}
@@ -608,15 +715,30 @@ export default function Home() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="space-y-6"
             >
+              <div className="flex items-center gap-5 mb-2">
+                <div className="relative w-20 h-20 shrink-0">
+                  <Image
+                    src="/profile.jpg"
+                    alt="Sri Ram Mannam"
+                    fill
+                    className="rounded-full object-cover border-2 border-warning-amber/50"
+                  />
+                </div>
+                <div>
+                  <p className="text-text-primary font-semibold font-mono-display">Sri Ram Mannam</p>
+                  <p className="text-text-secondary text-sm font-mono-display">MS Software Engineering · SJSU &#39;26</p>
+                </div>
+              </div>
               <p className="text-lg text-text-secondary font-serif-body leading-relaxed">
-                I&#39;m a Graduate Software Engineer with an MS in Software Engineering from San Jose State University.
-                My expertise lies in distributed systems, backend/cloud technologies, software-defined networking,
-                and virtualization.
+                I started building LessGo as a simple campus ridesharing app. By the time it shipped, it had 8 Node.js microservices,
+                a PostGIS-backed matching pipeline, and a SwiftUI client with live driver tracking. What surprised me wasn&#39;t the
+                scope — it was how much of the real work was making independent services agree on the same state under network
+                partitions. That&#39;s the problem I keep coming back to.
               </p>
               <p className="text-lg text-text-secondary font-serif-body leading-relaxed">
-                I&#39;m passionate about building scalable, efficient systems that solve complex problems.
-                I have experience working with Java, Python, C++, and Node.js/TypeScript, and I love exploring new
-                technologies and contributing to open-source projects.
+                Since then I&#39;ve built a RAG pipeline that corrects its own retrieval on low confidence, an autonomous trading
+                engine with an 8-check risk gate and 241 offline tests, and contributed audit-logging middleware to open-source
+                agentic infrastructure. The stack changes; the failure modes don&#39;t.
               </p>
               <div className="bg-surface border border-surface-lighter rounded-lg p-6 tech-border-amber">
                 <h3 className="text-xl font-semibold text-warning-amber mb-4 font-mono-display">
@@ -624,10 +746,10 @@ export default function Home() {
                 </h3>
                 <ul className="space-y-3 text-text-secondary">
                   {[
-                    'Design and implement distributed systems and microservices architectures',
-                    'Develop scalable backend systems and cloud-native applications',
-                    'Build software-defined networking (SDN) solutions and virtualization platforms',
-                    'Optimize system performance and implement efficient load balancing strategies'
+                    'Ship 8+ service distributed systems with independent deployability and JWT auth',
+                    'Build multi-stage RAG pipelines with corrective loops and page-level citations',
+                    'Wire CI/CD from GitHub Actions to AWS; write tests that never flake on missing credentials',
+                    'Contribute to open-source agentic infrastructure (observability, audit logging, tracing)'
                   ].map((item, index) => (
                     <li key={index} className="flex items-start">
                       <span className="mr-2 text-warning-amber">▹</span>
@@ -850,7 +972,7 @@ export default function Home() {
                         {project.description}
                       </p>
                       <div className="flex flex-wrap gap-2 mb-4">
-                        {[...new Set([...project.tags, ...(project.skills ?? [])])].map((skill) => (
+                        {project.tags.map((skill) => (
                           <span
                             key={skill}
                             className="text-xs px-2 py-1 bg-electric-cyan/10 border border-electric-cyan/30 rounded text-electric-cyan font-mono-display"
@@ -866,14 +988,26 @@ export default function Home() {
                         >
                           {expandedProject === project.id ? 'Show Less' : 'Learn More'}
                         </button>
-                        <a
-                          href={project.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-sm text-electric-cyan hover:text-electric-cyan-dim font-mono-display transition-colors"
-                        >
-                          View Code →
-                        </a>
+                        <div className="flex items-center gap-3">
+                          {'demoLink' in project && project.demoLink && (
+                            <a
+                              href={project.demoLink as string}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-sm text-terminal-green hover:text-terminal-green/70 font-mono-display transition-colors"
+                            >
+                              {(project.demoLabel as string) ?? 'Live Demo'} →
+                            </a>
+                          )}
+                          <a
+                            href={project.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sm text-electric-cyan hover:text-electric-cyan-dim font-mono-display transition-colors"
+                          >
+                            View Code →
+                          </a>
+                        </div>
                       </div>
                     </div>
                     {expandedProject === project.id && (
@@ -1051,7 +1185,7 @@ export default function Home() {
               </a>
             </div>
             <p className="text-text-secondary text-sm font-mono-display">
-              © 2024 Sri Ram Mannam. Built with precision.
+              © 2026 Sri Ram Mannam. Built with precision.
             </p>
           </div>
         </div>

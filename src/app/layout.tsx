@@ -21,8 +21,30 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://srirammannam.dev"),
   title: "Sri Ram Mannam - Software Engineer",
-  description: "Graduate Software Engineer specializing in Distributed Systems, Backend/Cloud, SDN/Virtualization",
+  description: "Graduate Software Engineer specializing in distributed systems, backend/cloud, and SDN. Built 8-service microservice platforms, RAG pipelines, and autonomous trading engines.",
+  openGraph: {
+    title: "Sri Ram Mannam - Software Engineer",
+    description: "Graduate Software Engineer specializing in distributed systems, backend/cloud, and SDN. Built 8-service microservice platforms, RAG pipelines, and autonomous trading engines.",
+    url: "https://srirammannam.dev",
+    siteName: "Sri Ram Mannam",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Sri Ram Mannam - Software Engineer",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Sri Ram Mannam - Software Engineer",
+    description: "Graduate Software Engineer specializing in distributed systems, backend/cloud, and SDN.",
+    images: ["/og-image.png"],
+  },
 };
 
 export default function RootLayout({
