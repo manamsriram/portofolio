@@ -15,6 +15,7 @@ export default function Home() {
   const [expandedProject, setExpandedProject] = useState<number | null>(null);
   const [filterCategory, setFilterCategory] = useState<string>('all');
   const [selectedSkill, setSelectedSkill] = useState<string | null>(null);
+  const [colCount, setColCount] = useState(3);
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
@@ -108,6 +109,13 @@ export default function Home() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [commandPaletteOpen]);
 
+  useEffect(() => {
+    const update = () => setColCount(window.innerWidth >= 1024 ? 3 : window.innerWidth >= 768 ? 2 : 1);
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
+
   const handleTerminalSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const command = terminalInput.toLowerCase().trim();
@@ -154,7 +162,11 @@ export default function Home() {
       category: ['distributed', 'cloud', 'devops'],
       color: 'cyan',
       link: 'https://github.com/manamsriram/SJSU_Ridesharing',
-      details: 'Broke the system into 8 independently deployable Node.js/Express services behind an API gateway with JWT auth and rate limiting. Added a 3-stage Python matching pipeline using graph embeddings, PostGIS geo-filtering (5 km / ±30 min), and a cost function across detour, wait time, and social history to pick fair driver matches.',
+      details: [
+        '8 Node.js/Express microservices behind an API gateway — each one deployable on its own with JWT auth and rate limiting',
+        'Python matching pipeline runs in 3 stages: graph embeddings, PostGIS geo-filter (5 km / ±30 min), then a cost function across detour, wait time, and ride history',
+        'Live driver tracking and in-app chat on the SwiftUI iOS client; Stripe handles payments',
+      ],
       skills: ['Distributed Systems', 'TypeScript', 'Node.js', 'PostgreSQL', 'Docker']
     },
     {
@@ -165,7 +177,12 @@ export default function Home() {
       category: ['fullstack', 'cloud', 'devops'],
       color: 'purple',
       link: 'https://github.com/manamsriram/Restaurant-Finder-Application',
-      details: 'Led front–back integration for a 4-person Agile team: defined API contracts, wired Google Maps ZIP-code search, and built owner/admin dashboards. Set up GitHub Actions to run pytest and integration tests on every push, deploying passing builds to AWS EC2/RDS. Reworked schemas and indexes to cut query time ~50% on the main search path.',
+      details: [
+        'Led front-back integration for a 4-person Agile team — defined API contracts, ran reviews, kept both sides in sync',
+        'Wired Google Maps ZIP-code search and built separate dashboards for restaurant owners and admins',
+        'GitHub Actions runs pytest and integration tests on every push; passing builds deploy straight to AWS EC2/RDS',
+        'Reworked DB schemas and indexes, cutting search query time by ~50%',
+      ],
       skills: ['React', 'Python', 'FastAPI', 'AWS', 'Backend']
     },
     {
@@ -176,7 +193,12 @@ export default function Home() {
       category: ['ai', 'cloud', 'devops'],
       color: 'green',
       link: 'https://github.com/manamsriram/AI-PDF-Reader',
-      details: 'Built an Alpine.js UI and Flask backend with a Corrective RAG loop to handle multi-hop questions. Added a three-tier Redis cache, Supabase JWT auth with per-user Qdrant collection isolation, vision captions for image-heavy PDFs, and a fallback path across Groq Llama 3.3 70B and a secondary model. Shipped via Docker + GitHub Actions to Render.',
+      details: [
+        'Multi-stage retrieval: dense vectors + BM25, fused with RRF, then reranked with a cross-encoder — citations link back to the exact page',
+        'Corrective RAG loop re-queries when confidence is low, so multi-hop questions actually get answered',
+        'Three-tier Redis cache, per-user Qdrant collection isolation via Supabase JWT, and vision captions for image-heavy PDFs',
+        'Falls back across Groq Llama 3.3 70B and a secondary model if the primary is down',
+      ],
       skills: ['Python', 'AI/ML', 'RAG', 'Redis', 'Docker']
     },
     {
@@ -187,7 +209,11 @@ export default function Home() {
       category: ['fullstack', 'backend', 'ai'],
       color: 'amber',
       link: 'https://github.com/manamsriram/EdgeRunner',
-      details: 'Exposed 15+ endpoints for positions, approvals, kill-switch controls, and performance charts so humans can monitor and override the bot in real time. Implemented idempotent trade execution tracking Sharpe ratio, max drawdown, and win rate. All 241 pytest tests pass offline (no API keys or network), keeping refactors from silently changing trade logic.',
+      details: [
+        '15+ endpoints for positions, approvals, kill-switch controls, and live performance charts — humans stay in the loop',
+        '8-check risk gate runs before every trade; idempotent execution logs track Sharpe ratio, max drawdown, and win rate',
+        '241 pytest tests pass entirely offline — no API keys or network needed, so CI never flakes on missing credentials',
+      ],
       skills: ['Python', 'FastAPI', 'React', 'TypeScript', 'Backend']
     },
     {
@@ -198,7 +224,11 @@ export default function Home() {
       category: ['backend', 'devops'],
       color: 'blue',
       link: 'https://github.com/manamsriram/pic-standard',
-      details: 'Built a Dockerized HTTP bridge for agentic provenance services with Python health checks and slimmer image builds, making local developer setup faster. Tightened security by adding audit-logging middleware, cleaning up X-Request-ID tracing, and exposing version endpoints in the PIC SDK so downstream services can identify which build handled a request.',
+      details: [
+        'Dockerized HTTP bridge for agentic provenance services — slimmer image builds, Python health checks, local setup just works',
+        'Audit-logging middleware and X-Request-ID tracing cleanup tightened the security surface',
+        'Version endpoints in the PIC SDK let downstream services know exactly which build handled a request',
+      ],
       skills: ['TypeScript', 'Python', 'Docker', 'Security', 'Backend']
     },
     {
@@ -209,7 +239,11 @@ export default function Home() {
       category: ['mobile', 'cloud'],
       color: 'green',
       link: 'https://github.com/manamsriram/Smart-Grocery-Assistant',
-      details: 'Built with React Native + Expo and TypeScript, using Firebase Firestore for real-time data sync and Firebase Auth for user accounts. Supports multiple shopping lists, pantry items with expiration dates, and recipe discovery from available ingredients. Navigation via Expo Router, global state via React Context, and light/dark/system theme support.',
+      details: [
+        'Track pantry items with expiration dates and get recipe suggestions based on what you actually have on hand',
+        'Multiple shopping lists with real-time sync via Firebase Firestore; accounts through Firebase Auth',
+        'Light, dark, and system theme support; Expo Router for navigation, React Context for global state',
+      ],
       skills: ['React Native', 'TypeScript', 'Firebase', 'Mobile Development']
     }
   ], []);
@@ -752,76 +786,75 @@ export default function Home() {
             </motion.div>
           )}
 
-          {/* Projects Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProjects.map((project, index) => (
-              <motion.div
-                key={project.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
-                className="bg-surface border border-surface-lighter rounded-lg overflow-hidden hover-lift hover-glow-purple group"
-              >
-                <div className="p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-xl font-bold text-text-primary group-hover:text-accent-purple transition-colors">
-                      {project.title}
-                    </h3>
-                    <div className={`w-3 h-3 rounded-full bg-${project.color === 'green' ? 'terminal-green' : project.color === 'cyan' ? 'electric-cyan' : project.color === 'amber' ? 'warning-amber' : project.color === 'purple' ? 'accent-purple' : 'electric-blue'}`} />
-                  </div>
-                  <p className="text-text-secondary mb-4 line-clamp-3">
-                    {project.description}
-                  </p>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {project.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-xs px-2 py-1 bg-surface-light rounded text-text-secondary font-mono-display"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  {project.skills && project.skills.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {project.skills.map((skill) => (
-                        <span
-                          key={skill}
-                          className="text-xs px-2 py-1 bg-electric-cyan/10 border border-electric-cyan/30 rounded text-electric-cyan font-mono-display"
-                        >
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                  <div className="flex items-center justify-between">
-                    <button
-                      onClick={() => setExpandedProject(expandedProject === project.id ? null : project.id)}
-                      className="text-sm text-accent-purple hover:text-accent-purple-dim font-mono-display transition-colors"
-                    >
-                      {expandedProject === project.id ? 'Show Less' : 'Learn More'}
-                    </button>
-                    <a
-                      href={project.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm text-electric-cyan hover:text-electric-cyan-dim font-mono-display transition-colors"
-                    >
-                      View Code →
-                    </a>
-                  </div>
-                </div>
-                {expandedProject === project.id && (
+          {/* Projects Grid — explicit flex-col columns so expand never causes cross-column reflow */}
+          <div className="flex gap-6">
+            {Array.from({ length: colCount }, (_, col) => (
+              <div key={col} className="flex-1 flex flex-col gap-6">
+                {filteredProjects.filter((_, i) => i % colCount === col).map((project, index) => (
                   <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    className="px-6 pb-6 border-t border-surface-lighter pt-4"
+                    key={project.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
+                    className="bg-surface border border-surface-lighter rounded-lg overflow-hidden hover-lift hover-glow-purple group"
                   >
-                    <p className="text-text-secondary text-sm">{project.details}</p>
+                    <div className="p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-xl font-bold text-text-primary group-hover:text-accent-purple transition-colors">
+                          {project.title}
+                        </h3>
+                        <div className={`w-3 h-3 rounded-full bg-${project.color === 'green' ? 'terminal-green' : project.color === 'cyan' ? 'electric-cyan' : project.color === 'amber' ? 'warning-amber' : project.color === 'purple' ? 'accent-purple' : 'electric-blue'}`} />
+                      </div>
+                      <p className="text-text-secondary mb-4 line-clamp-3">
+                        {project.description}
+                      </p>
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {[...new Set([...project.tags, ...(project.skills ?? [])])].map((skill) => (
+                          <span
+                            key={skill}
+                            className="text-xs px-2 py-1 bg-electric-cyan/10 border border-electric-cyan/30 rounded text-electric-cyan font-mono-display"
+                          >
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <button
+                          onClick={() => setExpandedProject(expandedProject === project.id ? null : project.id)}
+                          className="text-sm text-accent-purple hover:text-accent-purple-dim font-mono-display transition-colors"
+                        >
+                          {expandedProject === project.id ? 'Show Less' : 'Learn More'}
+                        </button>
+                        <a
+                          href={project.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm text-electric-cyan hover:text-electric-cyan-dim font-mono-display transition-colors"
+                        >
+                          View Code →
+                        </a>
+                      </div>
+                    </div>
+                    {expandedProject === project.id && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        className="px-6 pb-6 border-t border-surface-lighter pt-4"
+                      >
+                        <ul className="space-y-2">
+                          {project.details.map((point, i) => (
+                            <li key={i} className="flex gap-2 text-text-secondary text-sm">
+                              <span className="text-electric-cyan mt-0.5 shrink-0">•</span>
+                              {point}
+                            </li>
+                          ))}
+                        </ul>
+                      </motion.div>
+                    )}
                   </motion.div>
-                )}
-              </motion.div>
+                ))}
+              </div>
             ))}
           </div>
         </div>
