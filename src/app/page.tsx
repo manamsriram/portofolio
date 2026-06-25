@@ -2,21 +2,12 @@
 
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
+import GitTimeline from './components/GitTimeline';
 
 export default function Home() {
   const [currentPhrase, setCurrentPhrase] = useState(0);
   const [typedText, setTypedText] = useState('');
-  const [currentTime, setCurrentTime] = useState(() => {
-    const now = new Date();
-    const options: Intl.DateTimeFormatOptions = {
-      timeZone: 'America/Los_Angeles',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: true
-    };
-    return now.toLocaleTimeString('en-US', options) + ' PT';
-  });
+  const [currentTime, setCurrentTime] = useState('');
   const [activeSection, setActiveSection] = useState('hero');
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
   const [terminalInput, setTerminalInput] = useState('');
@@ -58,6 +49,8 @@ export default function Home() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    updateTime();
     const interval = setInterval(updateTime, 1000);
     return () => clearInterval(interval);
   }, []);
@@ -131,7 +124,7 @@ export default function Home() {
         response = 'Featured projects: LessGo, Restaurant Finder, DocSense AI, EdgeRunner, PIC Standard';
         break;
       case 'contact':
-        response = 'Email: manamsriram@gmail.com | Location: Pacific Time Zone | GitHub: github.com/manamsriram';
+        response = 'Email: sriram.mannam10@gmail.com | Location: Pacific Time Zone | GitHub: github.com/manamsriram';
         break;
       case 'skills':
         response = 'DevOps: Docker, Kubernetes, CI/CD, Terraform | Backend: Java, Python, Node.js, Go | Cloud: AWS, GCP, Azure';
@@ -141,7 +134,7 @@ export default function Home() {
         setTerminalInput('');
         return;
       case 'email':
-        window.location.href = 'mailto:manamsriram@gmail.com';
+        window.location.href = 'mailto:sriram.mannam10@gmail.com';
         response = 'Opening email client...';
         break;
       default:
@@ -229,26 +222,27 @@ export default function Home() {
     networking: { name: 'Networking', color: 'blue', items: ['SDN', 'Virtualization', 'Network Security'], level: 85 }
   }), []);
 
-  const timeline = [
+  const certifications = [
     {
-      year: '2024–2026',
-      title: 'MS Software Engineering',
-      description: 'San Jose State University · San Jose, CA. Coursework: Enterprise Distributed Technologies, Engineering Software Systems, Software Defined Networks, Virtualization Technologies, Machine Learning, Mobile Application Development.',
-      category: 'education'
+      title: 'IBM Backend Development Professional Certificate',
+      issuer: 'IBM / Coursera',
+      status: 'In Progress',
+      description: 'Backend engineering fundamentals, REST APIs, microservices, containers, and cloud-native development with Python and Node.js.',
     },
     {
-      year: 'May 2023–Mar 2024',
-      title: 'Student Mentor',
-      description: 'SmartInterviews · Ran 50+ code reviews and sprint-style practice cycles with 100+ students on data structures, algorithms, and backend topics. Wrote and presented curriculum on backend development, RESTful APIs, and scalable system design.',
-      category: 'experience'
+      title: 'Microsoft AI-200 Certification',
+      issuer: 'Microsoft',
+      status: 'In Progress',
+      description: 'Azure AI solutions: designing and implementing AI workloads, computer vision, NLP, and conversational AI on Azure.',
     },
     {
-      year: '2020–2024',
-      title: 'B.Tech Information Technology',
-      description: 'Prasad V. Potluri Siddhartha Institute of Technology · Vijayawada, India. Graduated May 2024.',
-      category: 'education'
-    }
+      title: 'GitHub Copilot Certification',
+      issuer: 'GitHub',
+      status: 'In Progress',
+      description: 'AI-assisted development workflows, prompt engineering for code generation, and responsible Copilot use in enterprise environments.',
+    },
   ];
+
 
   const filteredProjects = useMemo(() => {
     let result = filterCategory === 'all'
@@ -273,14 +267,19 @@ export default function Home() {
     setCommandPaletteOpen(false);
   };
 
-  const [particles] = useState(() => [...Array(20)].map((_, i) => ({
-    id: i,
-    left: Math.random() * 100,
-    top: Math.random() * 100,
-    x: Math.random() * 10 - 5,
-    duration: 3 + Math.random() * 2,
-    delay: Math.random() * 2
-  })));
+  const [particles, setParticles] = useState<Array<{ id: number; left: number; top: number; x: number; duration: number; delay: number }>>([]);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setParticles([...Array(20)].map((_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      x: Math.random() * 10 - 5,
+      duration: 3 + Math.random() * 2,
+      delay: Math.random() * 2,
+    })));
+  }, []);
 
   return (
     <div className="min-h-screen bg-deep-bg text-text-primary font-ui">
@@ -629,26 +628,37 @@ export default function Home() {
             <h3 className="text-2xl font-semibold text-text-primary mb-8 font-mono-display">
               Career Timeline
             </h3>
-            <div className="relative border-l-2 border-surface-lighter ml-4 space-y-8">
-              {timeline.map((item, index) => (
+            <GitTimeline />
+          </motion.div>
+          {/* Certifications */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.8 }}
+            className="mt-16"
+          >
+            <h3 className="text-2xl font-semibold text-text-primary mb-8 font-mono-display">
+              Certifications
+            </h3>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {certifications.map((cert, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: 1 + index * 0.1 }}
-                  className="timeline-item pl-8"
+                  transition={{ duration: 0.4, delay: 0.9 + index * 0.1 }}
+                  className="bg-surface border border-dashed border-accent-purple/50 rounded-lg p-6 hover:border-accent-purple transition-colors"
                 >
-                  <div className="bg-surface border border-surface-lighter rounded-lg p-6 hover:border-electric-cyan transition-colors">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="font-mono-display text-sm text-electric-cyan">{item.year}</span>
-                      <span className="text-xs px-2 py-1 bg-surface-light rounded text-text-secondary">
-                        {item.category}
-                      </span>
-                    </div>
-                    <h4 className="text-lg font-semibold text-text-primary mb-2">{item.title}</h4>
-                    <p className="text-text-secondary">{item.description}</p>
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-xs px-2 py-1 rounded bg-accent-purple/10 text-accent-purple font-mono-display">
+                      {cert.status}
+                    </span>
+                    <span className="text-xs text-text-secondary font-mono-display">{cert.issuer}</span>
                   </div>
+                  <h4 className="text-base font-semibold text-text-primary mb-2">{cert.title}</h4>
+                  <p className="text-sm text-text-secondary">{cert.description}</p>
                 </motion.div>
               ))}
             </div>
@@ -873,7 +883,7 @@ export default function Home() {
             className="grid md:grid-cols-3 gap-6"
           >
             <a
-              href="mailto:manamsriram@gmail.com"
+              href="mailto:sriram.mannam10@gmail.com"
               className="bg-surface border border-surface-lighter rounded-lg p-6 hover:border-electric-cyan transition-colors group"
             >
               <div className="w-12 h-12 bg-electric-cyan/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-electric-cyan/20 transition-colors">
@@ -882,7 +892,7 @@ export default function Home() {
                 </svg>
               </div>
               <h3 className="font-semibold text-text-primary mb-2 font-mono-display">Email</h3>
-              <p className="text-text-secondary text-sm">manamsriram@gmail.com</p>
+              <p className="text-text-secondary text-sm">sriram.mannam10@gmail.com</p>
             </a>
 
             <div className="bg-surface border border-surface-lighter rounded-lg p-6 hover:border-warning-amber transition-colors group">
@@ -935,7 +945,7 @@ export default function Home() {
                 </svg>
               </a>
               <a
-                href="mailto:manamsriram@gmail.com"
+                href="mailto:sriram.mannam10@gmail.com"
                 className="text-text-secondary hover:text-electric-cyan transition-colors"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
