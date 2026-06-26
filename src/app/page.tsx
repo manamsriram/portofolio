@@ -686,7 +686,7 @@ export default function Home() {
           >
             <button
               onClick={() => scrollToSection('projects')}
-              className="px-8 py-3 bg-electric-cyan text-deep-bg font-semibold rounded-lg hover:bg-electric-cyan-dim transition-colors font-mono-display"
+              className="px-8 py-3 border-2 border-electric-cyan text-electric-cyan font-semibold rounded-lg hover:bg-electric-cyan hover:text-deep-bg transition-colors font-mono-display"
             >
               View Projects
             </button>
@@ -725,6 +725,8 @@ export default function Home() {
             </div>
           </motion.div>
 
+        </div>
+
           {/* Scroll Hint */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -742,7 +744,6 @@ export default function Home() {
               </svg>
             </motion.div>
           </motion.div>
-        </div>
       </section>
 
       {/* About Section */}
