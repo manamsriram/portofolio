@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef, useMemo } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import Image from 'next/image';
 import GitTimeline from './components/GitTimeline';
@@ -28,6 +28,8 @@ export default function Home() {
   const [resumeDropdownOpen, setResumeDropdownOpen] = useState(false);
   const [heroResumeOpen, setHeroResumeOpen] = useState(false);
   const [commandQuery, setCommandQuery] = useState('');
+  const [uniformCardHeight, setUniformCardHeight] = useState<number | undefined>();
+  const cardInnerRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
@@ -325,6 +327,14 @@ export default function Home() {
 
     return result;
   }, [filterCategory, selectedSkill, projects, skills]);
+
+  useLayoutEffect(() => {
+    const els = cardInnerRefs.current.filter((el): el is HTMLDivElement => el !== null);
+    if (!els.length) return;
+    els.forEach(el => (el.style.minHeight = ''));
+    const max = Math.max(...els.map(el => el.offsetHeight));
+    setUniformCardHeight(max);
+  }, [filteredProjects]);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -1021,7 +1031,9 @@ export default function Home() {
           <div className="flex gap-6">
             {Array.from({ length: colCount }, (_, col) => (
               <div key={col} className="flex-1 flex flex-col gap-6">
-                {filteredProjects.filter((_, i) => i % colCount === col).map((project, index) => (
+                {filteredProjects.filter((_, i) => i % colCount === col).map((project, index) => {
+                  const flatIdx = col + index * colCount;
+                  return (
                   <motion.div
                     key={project.id}
                     initial={{ opacity: 0, y: 20 }}
@@ -1030,7 +1042,11 @@ export default function Home() {
                     transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
                     className="bg-surface border border-surface-lighter rounded-lg overflow-hidden hover-lift hover-glow-purple group"
                   >
-                    <div className="p-6 flex flex-col min-h-[280px]">
+                    <div
+                      className="p-6 flex flex-col"
+                      ref={el => { cardInnerRefs.current[flatIdx] = el; }}
+                      style={{ minHeight: uniformCardHeight ? `${uniformCardHeight}px` : '420px' }}
+                    >
                       <div className="flex items-center justify-between mb-4">
                         <h3 className="text-xl font-bold text-text-primary group-hover:text-accent-purple transition-colors">
                           {project.title}
@@ -1096,7 +1112,8 @@ export default function Home() {
                       </motion.div>
                     )}
                   </motion.div>
-                ))}
+                  );
+                })}
               </div>
             ))}
           </div>
