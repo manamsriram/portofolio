@@ -21,7 +21,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://srirammannam.dev"),
+  metadataBase: new URL(process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'),
   title: "Sri Ram Mannam - Software Engineer",
   description: "Graduate Software Engineer specializing in distributed systems, backend/cloud, and SDN. Built 8-service microservice platforms, RAG pipelines, and autonomous trading engines.",
   openGraph: {
@@ -29,22 +29,27 @@ export const metadata: Metadata = {
     description: "Graduate Software Engineer specializing in distributed systems, backend/cloud, and SDN. Built 8-service microservice platforms, RAG pipelines, and autonomous trading engines.",
     url: "https://srirammannam.dev",
     siteName: "Sri Ram Mannam",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Sri Ram Mannam - Software Engineer",
-      },
-    ],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Sri Ram Mannam - Software Engineer",
     description: "Graduate Software Engineer specializing in distributed systems, backend/cloud, and SDN.",
-    images: ["/og-image.png"],
   },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Sri Ram Mannam",
+  url: "https://srirammannam.dev",
+  jobTitle: "Software Engineer",
+  alumniOf: { "@type": "CollegeOrUniversity", name: "San Jose State University" },
+  knowsAbout: ["Distributed Systems", "Cloud Computing", "Software-Defined Networking", "Backend Engineering"],
+  sameAs: [
+    "https://github.com/manamsriram",
+    "https://linkedin.com/in/srirammannam",
+  ],
 };
 
 export default function RootLayout({
@@ -57,6 +62,12 @@ export default function RootLayout({
       lang="en"
       className={`${jetbrainsMono.variable} ${playfairDisplay.variable} ${inter.variable} h-full antialiased`}
     >
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

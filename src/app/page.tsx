@@ -5,6 +5,7 @@ import { motion, useScroll, useSpring } from 'framer-motion';
 import Image from 'next/image';
 import GitTimeline from './components/GitTimeline';
 import RunningName from './components/RunningName';
+import GitHubStats from './components/GitHubStats';
 
 export default function Home() {
   const [currentPhrase, setCurrentPhrase] = useState(0);
@@ -25,6 +26,8 @@ export default function Home() {
   const [colCount, setColCount] = useState(3);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [resumeDropdownOpen, setResumeDropdownOpen] = useState(false);
+  const [heroResumeOpen, setHeroResumeOpen] = useState(false);
+  const [commandQuery, setCommandQuery] = useState('');
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
@@ -113,6 +116,7 @@ export default function Home() {
       }
       if (e.key === 'Escape') {
         setCommandPaletteOpen(false);
+        setCommandQuery('');
       }
     };
 
@@ -168,62 +172,59 @@ export default function Home() {
     {
       id: 1,
       title: 'LessGo – Campus Ridesharing',
-      description: 'Campus ridesharing — 8 Node.js microservices, SwiftUI iOS client, and Stripe payments.',
-      tags: ['TypeScript', 'Node.js', 'Python', 'SwiftUI', 'GCP', 'K8s', 'Docker', 'Stripe'],
+      description: '8-service campus ridesharing platform — PostGIS geo-matching (5 km radius), SwiftUI live tracking, Stripe payments.',
+      tags: ['TypeScript', 'Node.js', 'Python', 'SwiftUI', 'GCP', 'Docker', 'Stripe', 'Kubernetes', 'Distributed Systems', 'Backend'],
       category: ['distributed', 'cloud', 'devops', 'backend', 'mobile', 'fullstack', 'ai'],
       color: 'cyan',
       link: 'https://github.com/manamsriram/SJSU_Ridesharing',
       demoLink: 'https://www.youtube.com/watch?v=l79FVVxRbPU',
       demoLabel: 'Watch Demo',
       details: [
-        '8 Node.js/Express microservices behind an API gateway — each one deployable on its own with JWT auth and rate limiting',
-        'Python matching pipeline runs in 3 stages: graph embeddings, PostGIS geo-filter (5 km / ±30 min), then a cost function across detour, wait time, and ride history',
-        'Live driver tracking and in-app chat on the SwiftUI iOS client; Stripe handles payments',
+        '8 Node.js/Express microservices behind an API gateway — each independently deployable with JWT auth and per-route rate limiting',
+        'Python matching pipeline: graph embeddings → PostGIS geo-filter (5 km / ±30 min) → cost function across detour, wait time, and ride history',
+        'Live driver tracking and in-app chat on SwiftUI iOS client; Stripe handles the full payment flow',
       ],
-      skills: ['Distributed Systems', 'TypeScript', 'Node.js', 'Docker', 'Backend', 'SwiftUI', 'GCP', 'Kubernetes']
     },
     {
       id: 2,
       title: 'Restaurant Finder',
-      description: 'React 18 + FastAPI restaurant finder with ZIP-code search, owner dashboards, and AWS CI/CD.',
-      tags: ['React 18', 'Python', 'FastAPI', 'MySQL', 'AWS', 'CI/CD', 'Google Maps API'],
+      description: 'React 18 + FastAPI restaurant finder — ~50% faster search via index tuning, GitHub Actions → AWS EC2/RDS.',
+      tags: ['React 18', 'Python', 'FastAPI', 'MySQL', 'AWS', 'CI/CD', 'Google Maps API', 'Backend'],
       category: ['fullstack', 'cloud', 'devops', 'backend'],
       color: 'purple',
       link: 'https://github.com/manamsriram/Restaurant-Finder-Application',
       demoLink: 'https://restaurant-finder-application.vercel.app/',
       demoLabel: 'Live Demo',
       details: [
-        'Led front-back integration for a 4-person Agile team — defined API contracts, ran reviews, kept both sides in sync',
-        'Wired Google Maps ZIP-code search and built separate dashboards for restaurant owners and admins',
-        'GitHub Actions runs pytest and integration tests on every push; passing builds deploy straight to AWS EC2/RDS',
-        'Reworked DB schemas and indexes, cutting search query time by ~50%',
+        'Led front-back integration for a 4-person Agile team — defined API contracts, ran code reviews, kept both sides in sync',
+        'ZIP-code search via Google Maps API; separate dashboards for restaurant owners and admins',
+        'GitHub Actions runs pytest + integration tests on every push; green builds deploy straight to AWS EC2/RDS',
+        'Reworked DB schemas and query indexes — cut search response time by ~50%',
       ],
-      skills: ['React', 'Python', 'FastAPI', 'AWS', 'Backend']
     },
     {
       id: 3,
       title: 'DocSense AI',
-      description: 'PDF chat via agentic RAG — multi-stage retrieval with page-level source citations.',
-      tags: ['Python', 'Flask', 'Qdrant', 'Redis', 'Docker', 'Supabase', 'LLM', 'RAG'],
+      description: 'Agentic RAG chatbot — dense+BM25 fusion, corrective retrieval loop, Llama 3.3 70B with 3-tier Redis cache.',
+      tags: ['Python', 'Flask', 'Qdrant', 'Redis', 'Docker', 'Supabase', 'LLM', 'RAG', 'AI/ML'],
       category: ['ai', 'cloud', 'devops'],
       color: 'green',
       link: 'https://github.com/manamsriram/DocSense-AI',
       demoLink: 'https://docsense-ai-7k4b.onrender.com',
       demoLabel: 'Live Demo',
       details: [
-        'Multi-stage retrieval: dense vectors + BM25, fused with RRF, then reranked with a cross-encoder — citations link back to the exact page',
-        'Corrective RAG loop re-queries when confidence is low, so multi-hop questions actually get answered',
-        'Three-tier Redis cache, per-user Qdrant collection isolation via Supabase JWT, and vision captions for image-heavy PDFs',
-        'Falls back across Groq Llama 3.3 70B and a secondary model if the primary is down',
+        'Multi-stage retrieval: dense vectors + BM25, fused with RRF, reranked with a cross-encoder — citations link back to the exact page',
+        'Corrective RAG loop re-queries when confidence is low; handles multi-hop questions that single-pass systems miss',
+        'Three-tier Redis cache, per-user Qdrant collection isolation via Supabase JWT, vision captions for image-heavy PDFs',
+        'Fails over across Groq Llama 3.3 70B and a secondary model automatically',
       ],
-      skills: ['Python', 'AI/ML', 'RAG', 'Redis', 'Docker']
     },
     {
       id: 4,
       title: 'EdgeRunner',
-      description: 'Autonomous trading engine with backtested strategies, 8-check risk gate, and 241 offline tests.',
-      tags: ['Python', 'FastAPI', 'React 19', 'TypeScript', 'PostgreSQL', 'pytest', 'CI/CD'],
-      category: ['backend', 'cloud','ai', 'devops'],
+      description: 'Autonomous trading engine — 8-check risk gate, 15+ control endpoints, 241 offline pytest tests, zero-flake CI.',
+      tags: ['Python', 'FastAPI', 'React 19', 'TypeScript', 'PostgreSQL', 'pytest', 'CI/CD', 'Backend'],
+      category: ['backend', 'cloud', 'ai', 'devops'],
       color: 'amber',
       link: 'https://github.com/manamsriram/EdgeRunner',
       demoLink: 'https://edge-runner-xi.vercel.app/',
@@ -231,15 +232,14 @@ export default function Home() {
       details: [
         '15+ endpoints for positions, approvals, kill-switch controls, and live performance charts — humans stay in the loop',
         '8-check risk gate runs before every trade; idempotent execution logs track Sharpe ratio, max drawdown, and win rate',
-        '241 pytest tests pass entirely offline — no API keys or network needed, so CI never flakes on missing credentials',
+        '241 pytest tests pass entirely offline — no API keys or network required, so CI never flakes on missing credentials',
       ],
-      skills: ['Python', 'FastAPI', 'React', 'TypeScript', 'Backend']
     },
     {
       id: 5,
       title: 'PIC Standard',
-      description: 'Open-source contributor to an agentic observability framework — audit logging, tracing, and security.',
-      tags: ['TypeScript', 'Python', 'Docker', 'Observability'],
+      description: 'Open-source contributor — Docker HTTP bridge, audit-logging middleware, X-Request-ID tracing for agentic systems.',
+      tags: ['TypeScript', 'Python', 'Docker', 'Observability', 'Security', 'Backend'],
       category: ['backend', 'devops'],
       color: 'blue',
       link: 'https://github.com/pic-standard/pic-standard',
@@ -248,33 +248,31 @@ export default function Home() {
         'Audit-logging middleware and X-Request-ID tracing cleanup tightened the security surface',
         'Version endpoints in the PIC SDK let downstream services know exactly which build handled a request',
       ],
-      skills: ['TypeScript', 'Python', 'Docker', 'Security', 'Backend']
     },
     {
       id: 6,
       title: 'Smart Grocery Assistant',
-      description: 'Mobile pantry tracker with expiry alerts, shopping lists, and smart recipe suggestions.',
-      tags: ['React Native', 'TypeScript', 'Expo', 'Firebase'],
+      description: 'React Native pantry tracker — real-time Firestore sync, expiry alerts, recipe suggestions, theme-aware UI.',
+      tags: ['React Native', 'TypeScript', 'Expo', 'Firebase', 'Mobile Development'],
       category: ['mobile', 'cloud'],
       color: 'green',
       link: 'https://github.com/manamsriram/Smart-Grocery-Assistant',
       demoLink: 'https://smart-grocery-assistant-chi.vercel.app/',
       demoLabel: 'Live Demo',
       details: [
-        'Track pantry items with expiration dates and get recipe suggestions based on what you actually have on hand',
+        'Track pantry items with expiration dates; recipe suggestions based on what you actually have on hand',
         'Multiple shopping lists with real-time sync via Firebase Firestore; accounts through Firebase Auth',
         'Light, dark, and system theme support; Expo Router for navigation, React Context for global state',
       ],
-      skills: ['React Native', 'TypeScript', 'Firebase', 'Mobile Development']
     }
   ], []);
 
   const skills = useMemo(() => ({
-    devops: { name: 'DevOps', color: 'green', items: ['Docker', 'Kubernetes', 'CI/CD', 'Terraform'], level: 85 },
-    backend: { name: 'Backend', color: 'cyan', items: ['Java', 'Python', 'Node.js', 'Go'], level: 90 },
-    distributed: { name: 'Distributed Systems', color: 'amber', items: ['Microservices', 'Message Queues', 'Load Balancing'], level: 80 },
-    cloud: { name: 'Cloud', color: 'purple', items: ['AWS', 'GCP', 'Azure', 'Serverless'], level: 75 },
-    networking: { name: 'Networking', color: 'blue', items: ['SDN', 'Virtualization', 'Network Security'], level: 85 }
+    devops: { name: 'DevOps', color: 'green', items: ['Docker', 'Kubernetes', 'CI/CD', 'Terraform'] },
+    backend: { name: 'Backend', color: 'cyan', items: ['Java', 'Python', 'Node.js', 'Go'] },
+    distributed: { name: 'Distributed Systems', color: 'amber', items: ['Microservices', 'Message Queues', 'Load Balancing'] },
+    cloud: { name: 'Cloud', color: 'purple', items: ['AWS', 'GCP', 'Azure', 'Serverless'] },
+    networking: { name: 'Networking', color: 'blue', items: ['SDN', 'Virtualization', 'Network Security'] }
   }), []);
 
   const certifications = [
@@ -321,7 +319,7 @@ export default function Home() {
     if (selectedSkill) {
       const skillItems = skills[selectedSkill as keyof typeof skills].items;
       result = result.filter(project =>
-        project.skills?.some(skill => skillItems.includes(skill))
+        project.tags.some(tag => skillItems.includes(tag))
       );
     }
 
@@ -334,6 +332,7 @@ export default function Home() {
       element.scrollIntoView({ behavior: 'smooth' });
     }
     setCommandPaletteOpen(false);
+    setCommandQuery('');
   };
 
   useEffect(() => {
@@ -355,6 +354,16 @@ export default function Home() {
     };
     canvas.addEventListener('mousemove', handleMouseMove);
     canvas.addEventListener('mouseleave', () => { mouseRef.current = { x: -1000, y: -1000 }; });
+
+    const handleTouchMove = (e: TouchEvent) => {
+      e.preventDefault();
+      const rect = canvas.getBoundingClientRect();
+      const touch = e.touches[0];
+      mouseRef.current = { x: touch.clientX - rect.left, y: touch.clientY - rect.top };
+    };
+    const handleTouchEnd = () => { mouseRef.current = { x: -1000, y: -1000 }; };
+    canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+    canvas.addEventListener('touchend', handleTouchEnd);
 
     const COUNT = 400;
     const REPEL_RADIUS = 100;
@@ -407,6 +416,8 @@ export default function Home() {
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener('resize', resize);
+      canvas.removeEventListener('touchmove', handleTouchMove);
+      canvas.removeEventListener('touchend', handleTouchEnd);
     };
   }, []);
 
@@ -536,7 +547,7 @@ export default function Home() {
       {/* Command Palette */}
       {commandPaletteOpen && (
         <div className="fixed inset-0 z-50 flex items-start justify-center pt-24 px-4">
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setCommandPaletteOpen(false)} />
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => { setCommandPaletteOpen(false); setCommandQuery(''); }} />
           <div className="relative w-full max-w-2xl bg-surface border border-surface-lighter rounded-xl shadow-2xl overflow-hidden">
             <div className="p-4 border-b border-surface-lighter">
               <input
@@ -544,21 +555,44 @@ export default function Home() {
                 placeholder="Type a command or search..."
                 className="w-full bg-transparent text-text-primary font-mono-display text-lg outline-none"
                 autoFocus
+                value={commandQuery}
+                onChange={(e) => setCommandQuery(e.target.value)}
               />
             </div>
             <div className="max-h-96 overflow-y-auto">
-              {['hero', 'about', 'projects', 'contact'].map((section) => (
-                <button
-                  key={section}
-                  onClick={() => scrollToSection(section)}
-                  className="w-full px-4 py-3 text-left hover:bg-surface-light transition-colors flex items-center justify-between group"
-                >
-                  <span className="font-mono-display text-text-primary group-hover:text-electric-cyan">
-                    {section.charAt(0).toUpperCase() + section.slice(1)}
-                  </span>
-                  <span className="text-xs text-text-secondary">Jump to section</span>
-                </button>
-              ))}
+              {['hero', 'about', 'projects', 'contact']
+                .filter(s => !commandQuery || s.includes(commandQuery.toLowerCase()))
+                .map((section) => (
+                  <button
+                    key={section}
+                    onClick={() => scrollToSection(section)}
+                    className="w-full px-4 py-3 text-left hover:bg-surface-light transition-colors flex items-center justify-between group"
+                  >
+                    <span className="font-mono-display text-text-primary group-hover:text-electric-cyan">
+                      {section.charAt(0).toUpperCase() + section.slice(1)}
+                    </span>
+                    <span className="text-xs text-text-secondary">Jump to section</span>
+                  </button>
+                ))}
+              {[
+                { label: 'Resume – Full-Stack', href: '/resume-fullstack.pdf' },
+                { label: 'Resume – Backend', href: '/resume-backend.pdf' },
+              ]
+                .filter(item => !commandQuery || item.label.toLowerCase().includes(commandQuery.toLowerCase()))
+                .map(item => (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    download
+                    onClick={() => { setCommandPaletteOpen(false); setCommandQuery(''); }}
+                    className="w-full px-4 py-3 text-left hover:bg-surface-light transition-colors flex items-center justify-between group block"
+                  >
+                    <span className="font-mono-display text-text-primary group-hover:text-terminal-green">
+                      {item.label}
+                    </span>
+                    <span className="text-xs text-text-secondary">Download PDF</span>
+                  </a>
+                ))}
             </div>
           </div>
         </div>
@@ -662,13 +696,33 @@ export default function Home() {
             >
               Get In Touch
             </button>
-            <a
-              href="/resume-fullstack.pdf"
-              download
-              className="px-8 py-3 border-2 border-terminal-green text-terminal-green font-semibold rounded-lg hover:bg-terminal-green hover:text-deep-bg transition-colors font-mono-display text-center"
-            >
-              Resume ↓
-            </a>
+            <div className="relative">
+              <button
+                onClick={() => setHeroResumeOpen(!heroResumeOpen)}
+                onBlur={() => setTimeout(() => setHeroResumeOpen(false), 150)}
+                className="px-8 py-3 border-2 border-terminal-green text-terminal-green font-semibold rounded-lg hover:bg-terminal-green hover:text-deep-bg transition-colors font-mono-display"
+              >
+                Resume ↓
+              </button>
+              {heroResumeOpen && (
+                <div className="absolute top-full left-0 mt-1 bg-surface border border-surface-lighter rounded-lg overflow-hidden shadow-lg min-w-full z-10">
+                  <a
+                    href="/resume-fullstack.pdf"
+                    download
+                    className="block px-4 py-2 text-sm font-mono-display text-text-secondary hover:text-terminal-green hover:bg-surface-light transition-colors"
+                  >
+                    Full-Stack
+                  </a>
+                  <a
+                    href="/resume-backend.pdf"
+                    download
+                    className="block px-4 py-2 text-sm font-mono-display text-text-secondary hover:text-terminal-green hover:bg-surface-light transition-colors border-t border-surface-lighter"
+                  >
+                    Backend
+                  </a>
+                </div>
+              )}
+            </div>
           </motion.div>
 
           {/* Scroll Hint */}
@@ -721,6 +775,8 @@ export default function Home() {
                     src="/profile.jpg"
                     alt="Sri Ram Mannam"
                     fill
+                    priority
+                    sizes="80px"
                     className="rounded-full object-cover border-2 border-warning-amber/50"
                   />
                 </div>
@@ -730,15 +786,13 @@ export default function Home() {
                 </div>
               </div>
               <p className="text-lg text-text-secondary font-serif-body leading-relaxed">
-                I started building LessGo as a simple campus ridesharing app. By the time it shipped, it had 8 Node.js microservices,
-                a PostGIS-backed matching pipeline, and a SwiftUI client with live driver tracking. What surprised me wasn&#39;t the
-                scope — it was how much of the real work was making independent services agree on the same state under network
-                partitions. That&#39;s the problem I keep coming back to.
+                I came to distributed systems through a bug I couldn&#39;t explain. I was building LessGo — a campus rideshare app — and two microservices were returning different views of the same ride. No errors, no crashes. Just two services that disagreed on state. That gap between &ldquo;the code is correct&rdquo; and &ldquo;the system is correct&rdquo; is what I&#39;ve been chasing ever since.
               </p>
               <p className="text-lg text-text-secondary font-serif-body leading-relaxed">
-                Since then I&#39;ve built a RAG pipeline that corrects its own retrieval on low confidence, an autonomous trading
-                engine with an 8-check risk gate and 241 offline tests, and contributed audit-logging middleware to open-source
-                agentic infrastructure. The stack changes; the failure modes don&#39;t.
+                At SJSU I&#39;ve built systems that had to be correct under failure: a retrieval pipeline that re-queries when its own confidence is low, a trading engine that runs 8 checks before every position, agentic middleware where a missed audit log is a security hole. The pattern I keep finding is that correctness isn&#39;t a property of individual services — it&#39;s a property of how they fail together.
+              </p>
+              <p className="text-lg text-text-secondary font-serif-body leading-relaxed">
+                I&#39;m finishing my MS in Software Engineering at SJSU in 2026. I&#39;m looking for a role where the failure modes are interesting and the systems actually have to work.
               </p>
               <div className="bg-surface border border-surface-lighter rounded-lg p-6 tech-border-amber">
                 <h3 className="text-xl font-semibold text-warning-amber mb-4 font-mono-display">
@@ -882,6 +936,20 @@ export default function Home() {
                 </motion.div>
               ))}
             </div>
+          </motion.div>
+
+          {/* GitHub Stats */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.8 }}
+            className="mt-16"
+          >
+            <h3 className="text-2xl font-semibold text-text-primary mb-8 font-mono-display">
+              GitHub Activity
+            </h3>
+            <GitHubStats />
           </motion.div>
         </div>
       </section>
@@ -1111,7 +1179,7 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.6 }}
-            className="grid md:grid-cols-3 gap-6"
+            className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"
           >
             <a
               href="mailto:sriram.mannam10@gmail.com"
@@ -1123,7 +1191,37 @@ export default function Home() {
                 </svg>
               </div>
               <h3 className="font-semibold text-text-primary mb-2 font-mono-display">Email</h3>
-              <p className="text-text-secondary text-sm">sriram.mannam10@gmail.com</p>
+              <p className="text-text-secondary text-sm truncate">sriram.mannam10@gmail.com</p>
+            </a>
+
+            <a
+              href="https://linkedin.com/in/srirammannam"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-surface border border-surface-lighter rounded-lg p-6 hover:border-accent-purple transition-colors group"
+            >
+              <div className="w-12 h-12 bg-accent-purple/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-accent-purple/20 transition-colors">
+                <svg className="w-6 h-6 text-accent-purple" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                </svg>
+              </div>
+              <h3 className="font-semibold text-text-primary mb-2 font-mono-display">LinkedIn</h3>
+              <p className="text-text-secondary text-sm truncate">Sri Ram Mannam</p>
+            </a>
+
+            <a
+              href="https://github.com/manamsriram"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-surface border border-surface-lighter rounded-lg p-6 hover:border-terminal-green transition-colors group"
+            >
+              <div className="w-12 h-12 bg-terminal-green/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-terminal-green/20 transition-colors">
+                <svg className="w-6 h-6 text-terminal-green" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+              </div>
+              <h3 className="font-semibold text-text-primary mb-2 font-mono-display">GitHub</h3>
+              <p className="text-text-secondary text-sm truncate">manamsriram</p>
             </a>
 
             <div className="bg-surface border border-surface-lighter rounded-lg p-6 hover:border-warning-amber transition-colors group">
@@ -1136,16 +1234,6 @@ export default function Home() {
               <h3 className="font-semibold text-text-primary mb-2 font-mono-display">Location</h3>
               <p className="text-text-secondary text-sm">Pacific Time Zone (UTC -07:00)</p>
             </div>
-
-            <div className="bg-surface border border-surface-lighter rounded-lg p-6 hover:border-terminal-green transition-colors group">
-              <div className="w-12 h-12 bg-terminal-green/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-terminal-green/20 transition-colors">
-                <svg className="w-6 h-6 text-terminal-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <h3 className="font-semibold text-text-primary mb-2 font-mono-display">Availability</h3>
-              <p className="text-text-secondary text-sm">Open to opportunities</p>
-            </div>
           </motion.div>
         </div>
       </section>
@@ -1153,37 +1241,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="bg-surface border-t border-surface-lighter py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <div className="flex justify-center space-x-6">
-              <a
-                href="https://github.com/manamsriram"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-text-secondary hover:text-electric-cyan transition-colors"
-              >
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                </svg>
-              </a>
-              <a
-                href="https://linkedin.com/in/srirammannam"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-text-secondary hover:text-electric-cyan transition-colors"
-              >
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                </svg>
-              </a>
-              <a
-                href="mailto:sriram.mannam10@gmail.com"
-                className="text-text-secondary hover:text-electric-cyan transition-colors"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-              </a>
-            </div>
+          <div className="flex justify-center">
             <p className="text-text-secondary text-sm font-mono-display">
               © 2026 Sri Ram Mannam. Built with precision.
             </p>
