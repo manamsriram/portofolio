@@ -97,14 +97,14 @@ export function Hero() {
             {resumeOpen && (
               <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 w-44 border border-terminal bg-terminal rounded shadow-lg overflow-hidden z-20">
                 <a
-                  href="/resume-fullstack.pdf"
+                  href={`${import.meta.env.BASE_URL}resume-fullstack.pdf`}
                   download
                   className="block px-4 py-2 text-sm font-mono text-foreground/90 hover:bg-primary/10 hover:text-primary transition-colors"
                 >
                   Full-Stack
                 </a>
                 <a
-                  href="/resume-backend.pdf"
+                  href={`${import.meta.env.BASE_URL}resume-backend.pdf`}
                   download
                   className="block px-4 py-2 text-sm font-mono text-foreground/90 hover:bg-primary/10 hover:text-primary transition-colors border-t border-terminal"
                 >

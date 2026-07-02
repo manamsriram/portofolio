@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { useState } from 'react'
-const profileUrl = '/profile.jpg'
+const profileUrl = `${import.meta.env.BASE_URL}profile.jpg`
 import { TerminalCard } from './TerminalCard'
 import { GitHubStats } from './GitHubStats'
 import { cn } from '@/lib/utils'

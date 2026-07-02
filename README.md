@@ -1,73 +1,89 @@
-# Welcome to your Lovable project
+# Sri Ram Mannam - Portfolio Website
 
-## Project info
+A modern, responsive portfolio website built with Next.js 15, TypeScript, and Tailwind CSS.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## 🚀 Quick Start
 
-## How can I edit this code?
+```bash
+# Install dependencies
+npm install
 
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Run development server
 npm run dev
+
+# Build for production
+npm run build
+
+# Start production server
+npm run start
+
+# Run linter
+npm run lint
 ```
 
-**Edit a file directly in GitHub**
+The development server will start at [http://localhost:3000](http://localhost:3000)
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 📋 Features
 
-**Use GitHub Codespaces**
+- **Modern Design**: Clean, professional layout with gradient backgrounds
+- **Responsive**: Fully responsive design that works on all devices
+- **Dark Mode**: Built-in dark mode support
+- **Fast Performance**: Optimized with Next.js 15 and React 19
+- **Type Safety**: Full TypeScript support
+- **SEO Friendly**: Proper metadata and semantic HTML
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## 🎨 Sections
 
-## What technologies are used for this project?
+- **Hero**: Introduction with call-to-action buttons
+- **About**: Personal background, skills, and expertise
+- **Projects**: Showcase of featured projects with links
+- **Contact**: Contact information and social media links
+- **Footer**: Copyright and social links
 
-This project is built with:
+## 🎯 Customization
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### Personal Information
 
-## How can I deploy this project?
+Update the following in `src/app/page.tsx`:
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+- Name and title in hero section
+- About me content and skills
+- Project details (title, description, tags, links)
+- Contact information (email, location, social links)
+- Footer copyright and social media URLs
 
-## Can I connect a custom domain to my Lovable project?
+### Styling
 
-Yes, you can!
+- Modify colors using Tailwind's color palette
+- Adjust spacing and layout using Tailwind's spacing utilities
+- Add custom animations or transitions in `globals.css`
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 🌐 Deployment
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+This portfolio is ready for deployment on:
+
+- **Vercel**: Recommended for Next.js projects
+- **Netlify**: Full support for Next.js
+- **GitHub Pages**: Requires static export configuration
+- **Any platform**: Supports Node.js and Next.js
+
+### Static Export
+
+To generate a static export, update `next.config.ts`:
+
+```typescript
+const nextConfig = {
+  output: 'export',
+  // ... other config
+}
+```
+
+## 📧 Contact
+
+- **Email**: manamsriram@gmail.com
+- **GitHub**: https://github.com/manamsriram
+- **LinkedIn**: https://linkedin.com/in/srirammannam
+
+---
+
+**© 2026 Sri Ram Mannam. All rights reserved.**

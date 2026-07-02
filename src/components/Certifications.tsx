@@ -27,6 +27,14 @@ const certs: Cert[] = [
     link: 'https://smartinterviews.in/certificate/84411827',
   },
   {
+    status: 'Completed',
+    issuer: 'GitHub',
+    title: 'GitHub Copilot Certification',
+    description:
+      'AI-assisted development workflows, prompt engineering for code generation, and responsible Copilot use in enterprise environments.',
+    link: 'https://learn.microsoft.com/en-us/users/mannamsriram-3665/credentials/96c2770b331150b3',
+  },
+  {
     status: 'In Progress',
     issuer: 'IBM / Coursera',
     title: 'Backend Development Professional Certificate',
@@ -39,13 +47,6 @@ const certs: Cert[] = [
     title: 'AI-200 Certification',
     description:
       'Azure AI solutions: designing and implementing AI workloads, computer vision, NLP, and conversational AI on Azure.',
-  },
-  {
-    status: 'In Progress',
-    issuer: 'GitHub',
-    title: 'GitHub Copilot Certification',
-    description:
-      'AI-assisted development workflows, prompt engineering for code generation, and responsible Copilot use in enterprise environments.',
   },
 ]
 
