@@ -86,21 +86,26 @@ export function About() {
 
           <motion.div {...fadeInUp} transition={{ ...fadeInUp.transition, delay: 0.15 }} className="space-y-5">
             <p className="text-base lg:text-lg text-foreground/80 leading-relaxed">
-              Sri Ram came to distributed systems through a bug he couldn't explain. While building LessGo, a campus
-              rideshare app, two microservices were returning different views of the same ride. No errors, no crashes.
-              Just two services that disagreed on state. That gap between{' '}
+              Sri Ram started out on the frontend. On Restaurant Finder, he built the UI while pair programming with
+              a friend on the APIs behind it, writing and testing the endpoints that fed his own screens, and that's
+              where the backend caught his interest. That interest turned into something harder to shake once he hit
+              a bug he couldn't explain: while building LessGo, a campus rideshare app, two microservices started
+              returning different views of the same ride. No errors, no crashes, just two services quietly
+              disagreeing on state. That gap between{' '}
               <em className="text-accent not-italic">"the code is correct"</em> and{' '}
               <em className="text-accent not-italic">"the system is correct"</em> is what he's been chasing ever since.
             </p>
             <p className="text-base lg:text-lg text-foreground/80 leading-relaxed">
-              At SJSU he's built systems that had to be correct under failure: a retrieval pipeline that re-queries when
-              its own confidence is low, a trading engine that runs eight checks before every position, agentic
-              middleware where a missed audit log is a security hole. The pattern he keeps finding is that correctness
-              isn't a property of individual services — it's a property of how they fail together.
+              At SJSU he's focused on systems that have to stay correct under failure: a retrieval pipeline that
+              re-queries when its own confidence is low, a trading engine that runs multiple checks before every
+              position, and agentic middleware where a missed audit log is a security issue, not a logging bug. The
+              pattern he keeps finding is that correctness is rarely a property of individual services. It's a
+              property of how they fail together.
             </p>
             <p className="text-base lg:text-lg text-foreground/80 leading-relaxed">
-              He's finishing his MS in Software Engineering at SJSU in 2026, looking for a role where the failure modes
-              are interesting and the systems actually have to work.
+              He has graduated from SJSU, with his Masters Degree in Software Engineering, in May 2026 and is looking for roles where the failure
+              modes are interesting, the systems actually have to work, and there's room to keep pushing his
+              understanding of distributed systems in production environments.
             </p>
           </motion.div>
         </div>
