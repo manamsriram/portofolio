@@ -1,89 +1,41 @@
-# Sri Ram Mannam - Portfolio Website
+# Hi, I'm Sri Ram Mannam 👋
 
-A modern, responsive portfolio website built with Next.js 15, TypeScript, and Tailwind CSS.
+Source for my personal portfolio site.
 
-## 🚀 Quick Start
+I build distributed systems and backend infrastructure: 8+ service architectures with independent deployability, RAG pipelines with corrective retrieval loops, CI/CD wired straight from GitHub Actions to AWS. I also contribute to open-source agentic tooling — observability, audit logging, tracing.
+
+## What's here
+
+A terminal-themed single page: hero, about (with live GitHub stats), timeline, projects, certifications, contact. No CMS, no backend — just a fast static site that says what I've built and how to reach me.
+
+```
+$ whoami
+Sri Ram Mannam — backend & distributed systems engineer
+
+$ ls skills/
+devops/  backend/  distributed-systems/  cloud/  networking/
+
+$ cat contact.txt
+github.com/manamsriram
+linkedin.com/in/srirammannam
+```
+
+## Stack
+
+Vite + React + TypeScript + Tailwind + shadcn/ui + Framer Motion, deployed as a static export to GitHub Pages.
+
+## Running it locally
 
 ```bash
-# Install dependencies
 npm install
-
-# Run development server
-npm run dev
-
-# Build for production
-npm run build
-
-# Start production server
-npm run start
-
-# Run linter
-npm run lint
+npm run dev      # localhost:5173
+npm run build    # static output to dist/
 ```
 
-The development server will start at [http://localhost:3000](http://localhost:3000)
+## Why open source this
 
-## 📋 Features
-
-- **Modern Design**: Clean, professional layout with gradient backgrounds
-- **Responsive**: Fully responsive design that works on all devices
-- **Dark Mode**: Built-in dark mode support
-- **Fast Performance**: Optimized with Next.js 15 and React 19
-- **Type Safety**: Full TypeScript support
-- **SEO Friendly**: Proper metadata and semantic HTML
-
-## 🎨 Sections
-
-- **Hero**: Introduction with call-to-action buttons
-- **About**: Personal background, skills, and expertise
-- **Projects**: Showcase of featured projects with links
-- **Contact**: Contact information and social media links
-- **Footer**: Copyright and social links
-
-## 🎯 Customization
-
-### Personal Information
-
-Update the following in `src/app/page.tsx`:
-
-- Name and title in hero section
-- About me content and skills
-- Project details (title, description, tags, links)
-- Contact information (email, location, social links)
-- Footer copyright and social media URLs
-
-### Styling
-
-- Modify colors using Tailwind's color palette
-- Adjust spacing and layout using Tailwind's spacing utilities
-- Add custom animations or transitions in `globals.css`
-
-## 🌐 Deployment
-
-This portfolio is ready for deployment on:
-
-- **Vercel**: Recommended for Next.js projects
-- **Netlify**: Full support for Next.js
-- **GitHub Pages**: Requires static export configuration
-- **Any platform**: Supports Node.js and Next.js
-
-### Static Export
-
-To generate a static export, update `next.config.ts`:
-
-```typescript
-const nextConfig = {
-  output: 'export',
-  // ... other config
-}
-```
-
-## 📧 Contact
-
-- **Email**: manamsriram@gmail.com
-- **GitHub**: https://github.com/manamsriram
-- **LinkedIn**: https://linkedin.com/in/srirammannam
+So people can see how the site's built, steal what's useful, and reach me if something's broken or worth talking about.
 
 ---
 
-**© 2026 Sri Ram Mannam. All rights reserved.**
+📫 **sriram.mannam10@gmail.com** · [GitHub](https://github.com/manamsriram) · [LinkedIn](https://linkedin.com/in/srirammannam)
