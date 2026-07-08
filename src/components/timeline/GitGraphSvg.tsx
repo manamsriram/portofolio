@@ -92,7 +92,7 @@ export function GitGraphSvg({
               const fill = { color: stroke, opacity: d.item.status && FADED_STATUS.has(d.item.status) ? 0.4 : 1 }
               const isTip = d.row === tipRow
               return (
-                <g key={d.item.id}>
+                <g key={`${d.item.id}-${d.row}`}>
                   {isOpen && isTip && (
                     <motion.circle
                       cx={d.cx}
