@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { useState } from 'react'
-import { ParticleBackground } from './ParticleBackground'
+import { AntigravityBackground } from './AntigravityBackground'
 import { LiveClock } from './LiveClock'
 import { TerminalCard } from './TerminalCard'
 import { TypedText } from './TypedText'
@@ -23,7 +23,7 @@ export function Hero() {
   return (
     <section id="hero" className="relative min-h-screen w-full overflow-hidden flex items-center justify-center">
       <div className="absolute inset-0">
-        <ParticleBackground />
+        <AntigravityBackground />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background pointer-events-none" />
       </div>
 
