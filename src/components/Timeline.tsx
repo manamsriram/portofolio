@@ -3,17 +3,10 @@ import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { timelineItems, type TimelineItem, type TimelineStatus } from '@/data/timeline'
 import { cn } from '@/lib/utils'
+import { GitGraphSvg } from '@/components/timeline/GitGraphSvg'
+import { buildGraphLayout, formatDateRange, hashId } from '@/lib/timelineGraph'
 
 type HoverState = { item: TimelineItem; x: number; y: number } | null
-
-const STATUS_DOT: Record<TimelineStatus, string> = {
-  active: 'bg-primary border-primary',
-  graduated: 'bg-accent border-accent',
-  started: 'bg-accent/40 border-accent',
-  completed: 'bg-[#a78bfa] border-[#a78bfa]',
-  contributed: 'bg-[#f59e0b] border-[#f59e0b]',
-  'in-progress': 'bg-[#f59e0b]/40 border-[#f59e0b]',
-}
 
 const STATUS_TEXT: Record<TimelineStatus, string> = {
   active: 'text-primary',
@@ -33,33 +26,17 @@ const STATUS_LABEL: Record<TimelineStatus, string> = {
   'in-progress': 'IN PROGRESS',
 }
 
-const TRACKS = ['education', 'experience', 'project'] as const
-const TRACK_COLORS: Record<(typeof TRACKS)[number], string> = {
+const TRACK_COLORS: Record<TimelineItem['track'], string> = {
   education: 'text-accent',
   experience: 'text-primary',
   project: 'text-[#a78bfa]',
 }
 
-function Node({
-  item,
-  onEnter,
-  onLeave,
-}: {
-  item: TimelineItem
-  onEnter: (e: React.MouseEvent<HTMLDivElement>) => void
-  onLeave: () => void
-}) {
-  const dot = item.status ? STATUS_DOT[item.status] : 'bg-muted border-muted'
-  return (
-    <motion.div
-      className={cn('w-3 h-3 rounded-full border-2 cursor-pointer mx-auto', dot)}
-      onMouseEnter={onEnter}
-      onMouseLeave={onLeave}
-      whileHover={{ scale: 1.6 }}
-      transition={{ duration: 0.1 }}
-    />
-  )
-}
+const LEGEND: { track: TimelineItem['track']; label: string; dot: string }[] = [
+  { track: 'education', label: 'education', dot: 'bg-accent' },
+  { track: 'experience', label: 'experience', dot: 'bg-primary' },
+  { track: 'project', label: 'project', dot: 'bg-[#a78bfa]' },
+]
 
 function HoverCard({
   hovered,
@@ -103,7 +80,7 @@ function HoverCard({
         </div>
       )}
       <div className="flex items-center justify-between pt-2 border-t border-terminal">
-        {item.dateRange && <span className="text-xs text-muted-foreground font-mono">{item.dateRange}</span>}
+        <span className="text-xs text-muted-foreground font-mono">{formatDateRange(item)}</span>
         {item.link && (
           <a href={item.link} target="_blank" rel="noopener noreferrer" className="text-xs text-accent hover:text-primary font-mono transition-colors">
             View GitHub →
@@ -122,14 +99,14 @@ export function Timeline() {
   useEffect(() => setMounted(true), [])
 
   const visible = timelineItems.filter((i) => i.visible)
-  const years = [...new Set(visible.flatMap((i) => i.years))].sort((a, b) => b - a)
+  const layout = buildGraphLayout(visible)
 
   const cancelHide = () => hideTimer.current && clearTimeout(hideTimer.current)
   const scheduleHide = () => {
     cancelHide()
     hideTimer.current = setTimeout(() => setHovered(null), 120)
   }
-  const handleEnter = (e: React.MouseEvent<HTMLDivElement>, item: TimelineItem) => {
+  const handleEnter = (e: React.MouseEvent<SVGCircleElement>, item: TimelineItem) => {
     cancelHide()
     const r = e.currentTarget.getBoundingClientRect()
     setHovered({ item, x: r.right + 12, y: r.top - 8 })
@@ -148,63 +125,45 @@ export function Timeline() {
           <span className="font-mono text-xs text-primary tracking-widest uppercase">// timeline</span>
           <h2 className="font-display text-5xl md:text-7xl lg:text-8xl mt-3">Career Timeline</h2>
           <p className="mt-4 text-sm text-muted-foreground font-mono">Hover any node to see details.</p>
-        </motion.div>
-
-        <div className="relative">
-          <div className="grid grid-cols-[64px_1fr_1fr_1fr] gap-2 mb-2 px-2">
-            <div />
-            {TRACKS.map((t) => (
-              <div key={t} className={cn('text-xs font-mono uppercase tracking-widest text-center', TRACK_COLORS[t])}>
-                {t}
+          <div className="flex items-center gap-4 mt-4">
+            {LEGEND.map((l) => (
+              <div key={l.track} className="flex items-center gap-1.5">
+                <span className={cn('w-2 h-2 rounded-full', l.dot)} />
+                <span className={cn('text-xs font-mono uppercase tracking-widest', TRACK_COLORS[l.track])}>{l.label}</span>
               </div>
             ))}
           </div>
-          <div className="border-t border-terminal mb-1" />
+        </motion.div>
 
-          {(() => {
-            const rows = years.map((year) => {
-              const yearItems = visible.filter((i) => i.years.includes(year))
-              return (
-                <div key={year} className="grid grid-cols-[64px_1fr_1fr_1fr] gap-2 px-2 relative">
-                  <div className="flex items-start pt-4">
-                    <span className="text-sm font-mono text-muted-foreground">{year}</span>
-                  </div>
-                  {TRACKS.map((track) => {
-                    const items = yearItems.filter((i) => i.track === track)
-                    return (
-                      <div key={track} className="relative flex flex-col items-center min-h-[48px]">
-                        <div className="relative z-10 flex flex-col gap-2 py-3">
-                          {items.map((item) => (
-                            <Node
-                              key={item.id}
-                              item={item}
-                              onEnter={(e) => handleEnter(e, item)}
-                              onLeave={scheduleHide}
-                            />
-                          ))}
-                          {items.length === 0 && <div className="w-3 h-3" />}
-                        </div>
+        <div className="overflow-x-auto">
+          <div className="flex min-w-fit">
+            <GitGraphSvg layout={layout} onEnter={handleEnter} onLeave={scheduleHide} />
+            <div className="flex-1 min-w-0">
+              {layout.rows.map((row) => (
+                <div
+                  key={row.row}
+                  className="flex flex-col justify-center gap-1 px-3 border-b border-terminal/40 last:border-b-0"
+                  style={{ height: row.height }}
+                >
+                  {row.items.map((item) => (
+                    <div key={item.id} className="flex items-center justify-between gap-4">
+                      <div className="min-w-0 flex items-baseline gap-2">
+                        <span className={cn('font-mono text-xs shrink-0', TRACK_COLORS[item.track])}>{item.track}:</span>
+                        <span className="font-mono text-sm text-foreground truncate">{item.title}</span>
                       </div>
-                    )
-                  })}
-                </div>
-              )
-            })
-            return (
-              <div className="relative">
-                {/* Continuous vertical lines behind all rows */}
-                <div className="absolute inset-0 grid grid-cols-[64px_1fr_1fr_1fr] gap-2 px-2 pointer-events-none">
-                  <div />
-                  {TRACKS.map((t) => (
-                    <div key={t} className="relative">
-                      <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-px bg-[hsl(var(--terminal-border))]" />
+                      <div className="flex items-center gap-3 shrink-0 font-mono text-xs text-muted-foreground">
+                        <span className="text-muted-foreground/70">{hashId(item.id)}</span>
+                        {item.status && (
+                          <span className={cn('whitespace-nowrap', STATUS_TEXT[item.status])}>{STATUS_LABEL[item.status]}</span>
+                        )}
+                        <span className="whitespace-nowrap">{formatDateRange(item)}</span>
+                      </div>
                     </div>
                   ))}
                 </div>
-                <div className="relative">{rows}</div>
-              </div>
-            )
-          })()}
+              ))}
+            </div>
+          </div>
         </div>
 
         {mounted &&
