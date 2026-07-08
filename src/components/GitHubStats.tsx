@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { TerminalCard } from './TerminalCard'
 
 const USERNAME = 'manamsriram'
+const CACHE_KEY = 'github-stats-cache-v1'
+const CACHE_TTL_MS = 60 * 60 * 1000
 
 interface Stats {
   repos: number
@@ -9,28 +11,58 @@ interface Stats {
   languages: number
 }
 
+function readCache(): Stats | null {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY)
+    if (!raw) return null
+    const { stats, ts } = JSON.parse(raw)
+    if (Date.now() - ts > CACHE_TTL_MS) return null
+    return stats
+  } catch {
+    return null
+  }
+}
+
+function writeCache(stats: Stats) {
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify({ stats, ts: Date.now() }))
+  } catch {
+    // ignore quota/storage errors
+  }
+}
+
 export function GitHubStats() {
-  const [stats, setStats] = useState<Stats | null>(null)
+  const [stats, setStats] = useState<Stats | null>(() => readCache())
   const [error, setError] = useState(false)
 
   useEffect(() => {
+    if (stats) return
     const year = new Date().getFullYear()
-    Promise.all([
+    Promise.allSettled([
       fetch(`https://api.github.com/users/${USERNAME}`).then((r) => r.json()),
       fetch(`https://api.github.com/users/${USERNAME}/repos?per_page=100`).then((r) => r.json()),
       fetch(
         `https://api.github.com/search/commits?q=author:${USERNAME}+committer-date:${year}-01-01..${year}-12-31&per_page=1`,
         { headers: { Accept: 'application/vnd.github.cloak-preview+json' } },
       ).then((r) => r.json()),
-    ])
-      .then(([user, repos, commitSearch]) => {
-        const languages = Array.isArray(repos)
-          ? new Set(repos.map((r: { language: string | null }) => r.language).filter(Boolean)).size
-          : 0
-        setStats({ repos: user.public_repos ?? 0, commits: commitSearch?.total_count ?? 0, languages })
-      })
-      .catch(() => setError(true))
-  }, [])
+    ]).then(([userResult, reposResult, commitResult]) => {
+      const user = userResult.status === 'fulfilled' ? userResult.value : null
+      const repos = reposResult.status === 'fulfilled' ? reposResult.value : null
+      const commitSearch = commitResult.status === 'fulfilled' ? commitResult.value : null
+
+      if (!user && !repos) {
+        setError(true)
+        return
+      }
+
+      const languages = Array.isArray(repos)
+        ? new Set(repos.map((r: { language: string | null }) => r.language).filter(Boolean)).size
+        : 0
+      const next = { repos: user?.public_repos ?? 0, commits: commitSearch?.total_count ?? 0, languages }
+      setStats(next)
+      writeCache(next)
+    })
+  }, [stats])
 
   if (error) {
     return (
