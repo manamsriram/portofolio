@@ -36,7 +36,7 @@ export function GitHubStats() {
   const [error, setError] = useState(false)
 
   useEffect(() => {
-    if (stats?.commits != null) return
+    if (stats?.commits) return
     const year = new Date().getFullYear()
     Promise.allSettled([
       fetch(`https://api.github.com/users/${USERNAME}`).then((r) => r.json()),
