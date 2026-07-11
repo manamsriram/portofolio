@@ -7,7 +7,7 @@ const CACHE_TTL_MS = 60 * 60 * 1000
 
 interface Stats {
   repos: number
-  commits: number
+  commits: number | null
   languages: number
 }
 
@@ -36,7 +36,7 @@ export function GitHubStats() {
   const [error, setError] = useState(false)
 
   useEffect(() => {
-    if (stats) return
+    if (stats?.commits != null) return
     const year = new Date().getFullYear()
     Promise.allSettled([
       fetch(`https://api.github.com/users/${USERNAME}`).then((r) => r.json()),
@@ -58,9 +58,10 @@ export function GitHubStats() {
       const languages = Array.isArray(repos)
         ? new Set(repos.map((r: { language: string | null }) => r.language).filter(Boolean)).size
         : 0
-      const next = { repos: user?.public_repos ?? 0, commits: commitSearch?.total_count ?? 0, languages }
+      const commits = typeof commitSearch?.total_count === 'number' ? commitSearch.total_count : null
+      const next = { repos: user?.public_repos ?? 0, commits, languages }
       setStats(next)
-      writeCache(next)
+      if (commits != null) writeCache(next)
     })
   }, [stats])
 
