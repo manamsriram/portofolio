@@ -6,9 +6,9 @@ const CACHE_KEY = 'github-stats-cache-v1'
 const CACHE_TTL_MS = 60 * 60 * 1000
 
 interface Stats {
-  repos: number
+  repos: number | null
   commits: number | null
-  languages: number
+  languages: number | null
 }
 
 function readCache(): Stats | null {
@@ -36,7 +36,7 @@ export function GitHubStats() {
   const [error, setError] = useState(false)
 
   useEffect(() => {
-    if (stats?.commits) return
+    if (stats?.repos && stats?.commits && stats?.languages) return
     const year = new Date().getFullYear()
     Promise.allSettled([
       fetch(`https://api.github.com/users/${USERNAME}`).then((r) => r.json()),
@@ -57,11 +57,11 @@ export function GitHubStats() {
 
       const languages = Array.isArray(repos)
         ? new Set(repos.map((r: { language: string | null }) => r.language).filter(Boolean)).size
-        : 0
+        : null
       const commits = typeof commitSearch?.total_count === 'number' ? commitSearch.total_count : null
-      const next = { repos: user?.public_repos ?? 0, commits, languages }
+      const next = { repos: typeof user?.public_repos === 'number' ? user.public_repos : null, commits, languages }
       setStats(next)
-      if (commits != null) writeCache(next)
+      if (next.repos != null && next.commits != null && next.languages != null) writeCache(next)
     })
   }, [stats])
 
@@ -85,7 +85,7 @@ export function GitHubStats() {
 
   const rows = [
     { label: 'Public Repos', value: stats?.repos },
-    { label: `${new Date().getFullYear()} Commits`, value: stats?.commits ? `${stats.commits}+` : undefined },
+    { label: `${new Date().getFullYear()} Commits`, value: stats?.commits != null ? `${stats.commits}+` : null },
     { label: 'Languages', value: stats?.languages },
   ]
 
@@ -95,7 +95,7 @@ export function GitHubStats() {
         {rows.map(({ label, value }) => (
           <div key={label} className="text-center">
             <div className="text-2xl text-primary">
-              {value !== undefined ? value : <span className="text-muted-foreground animate-pulse">—</span>}
+              {value != null ? value : <span className="text-muted-foreground animate-pulse">—</span>}
             </div>
             <div className="text-[10px] text-muted-foreground mt-1">{label}</div>
           </div>
